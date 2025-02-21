@@ -1,74 +1,188 @@
-{% extends "layout.html" %}
-{% block title %}Homepage{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
-
-{{ super() }}
-
 {% block content %}
 
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-    .tables-container {
+    body {
         display: flex;
+        background-color: #f5f5f5;
+        margin: 0;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: black;
+        color: white;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
         justify-content: space-between;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+        padding: 20px 5px;
+    }
+
+    .sidebar h2, .sidebar a span {
+        display: block;
+    }
+
+    .sidebar.collapsed h2, .sidebar.collapsed a span {
+        display: none;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+        text-align: left;
+        width: 100%;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+
+    .toggle-btn {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .content {
+        margin-left: 250px;
+        padding: 100px 20px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .sidebar.collapsed + .content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .leaderboard-wrapper {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .sidebar.collapsed + .content .leaderboard-wrapper {
+        width: 80%;
+    }
+
+    .top-ranked {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin-bottom: 30px;
+        align-items: flex-end;
+    }
+
+    .top-card {
+        background: #eee;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .first-place {
+        transform: scale(1.2);
+        font-size: 20px;
     }
 
     .leaderboard-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
     }
 
-    .leaderboard-table th,
-    .leaderboard-table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid white;
-    }
-
-    /*.leaderboard-table th {
-        background-color: #f2f2f2;
-        font-weight: bold;
+    .leaderboard-table th, .leaderboard-table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
     }
 
     .leaderboard-table tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }*/
-
-    .leaderboard-table tbody tr:hover {
-        background-color: black;
-    }
-
-    .leaderboard-table tbody tr td a {
-        color: black;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .leaderboard-table tbody tr td a:hover {
-        text-decoration: underline;
+        background-color: #f9f9f9;
     }
 </style>
-<div class="container">
-    <div class="tables-container">
-        <div class="leaderboard-table">
-            <center>
-                <h2 style="color: white; background-color: black; border-radius: 15px;">Leaderboard</h2>
-            </center>
-            <table class="table" style="font-family: verdana;">
+
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="#" style="color: purple;">🏠 <span>Home</span></a>
+    <a href="#">📊 <span>Leaderboard</span></a>
+    <a href="#">📅 <span>Competitions</span></a>
+    <a href="#">💬 <span>Chat</span></a>
+    <a href="#">🔔 <span>Notifications</span></a>
+    <a href="#">👤 <span>Profile</span></a>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+</div>
+
+<div class="content">
+    <div class="leaderboard-wrapper">
+        <div class="top-ranked">
+            {% if leaderboard|length > 1 %}
+            <div class="top-card">🥈 {{ leaderboard[1]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[1]['rating score']|float }}</div>
+            {% endif %}
+            {% if leaderboard|length > 0 %}
+            <div class="top-card first-place">🥇 {{ leaderboard[0]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[0]['rating score']|float }}</div>
+            {% endif %}
+            {% if leaderboard|length > 2 %}
+            <div class="top-card">🥉 {{ leaderboard[2]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[2]['rating score']|float }}</div>
+            {% endif %}
+        </div>
+
+        <div class="leaderboard-container">
+            <table class="leaderboard-table">
                 <thead>
-                    <tr style="color: white;">
-                        <th><center>Overall Rank</center></th>
-                        <th><center>Username</center></th>
-                        <th><center>Rating Score</center></th>
+                    <tr>
+                        <th>Overall Rank</th>
+                        <th>Username</th>
+                        <th>Rating Score</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for student in leaderboard[:20] %}
-                    <tr style="color: white;">
-                        <td><center>{{student['placement']}}</center></td>
-                        <td><center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student['student'])}}">{{ student['student']}}</a></center></td>
-                        <td><center>{{'%0.2f' % student['rating score']|float}}</center></td>
+                    {% for student in leaderboard[3:20] %}
+                    <tr>
+                        <td>{{ student['placement'] }}</td>
+                        <td><a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">{{ student['student'] }}</a></td>
+                        <td>{{ '%0.2f' % student['rating score']|float }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -76,5 +190,11 @@
         </div>
     </div>
 </div>
-<div style="padding: 20px;"></div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+</script>
+
 {% endblock %}
