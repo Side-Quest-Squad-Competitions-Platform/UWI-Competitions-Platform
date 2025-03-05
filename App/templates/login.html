@@ -1,12 +1,19 @@
 {% block content %}
 
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+</head>
+
 <style>
+*{
+    font-family: 'Poppins', sans-serif;
+}
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
     body {
         margin: 0;
         padding: 0;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', sans-serif;
         display: flex;
         height: 100vh;
         background: white;
@@ -14,43 +21,58 @@
 
     /* Sidebar */
     .sidebar {
-        width: 250px;
+        width: 210px;
         height: 100vh;
         background: black;
         color: white;
         padding: 20px;
         position: fixed;
         left: 0;
-        top: 0;
+        top: -30;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
         justify-content: space-between;
     }
 
-    .sidebar h2 {
-        font-style: italic;
-        font-size: 26px;
-        margin-bottom: 30px;
+    .sidebar.collapsed {
+        width: 60px;
+        padding: 20px 5px;
     }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
+    .sidebar h2, .sidebar a span {
+        display: block;
     }
 
-    .sidebar ul li {
-        padding: 12px 0;
+    .sidebar.collapsed h2, .sidebar.collapsed a span {
+        display: none;
     }
 
-    .sidebar ul li a {
-        text-decoration: none;
+    .sidebar a {
+        display: flex;
+        align-items: center;
         color: white;
-        font-size: 18px;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+        text-align: left;
+        width: 100%;
     }
 
-    .sidebar .profile {
-        padding-top: 20px;
-        border-top: 1px solid gray;
+    .sidebar a:hover {
+        background-color: #333;
+    }
+
+    .toggle-btn {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 20px;
     }
 
     /* Centering the login form */
@@ -61,6 +83,12 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .sidebar.collapsed + .container {
+        margin-left: 60px;
+        width: calc(100vw - 60px);
     }
 
     .login-box {
@@ -82,7 +110,7 @@
 
     .login-box p a {
         font-weight: bold;
-        color: #4a00e0;
+        color: #5E31E3;
         text-decoration: none;
     }
 
@@ -129,7 +157,7 @@
     .btn {
         width: 100%;
         padding: 18px;
-        background: linear-gradient(to right, #6a00e0, #a000ff);
+        background: linear-gradient(to right, #5E31E3, #a000ff);
         color: white;
         border: none;
         border-radius: 35px;
@@ -145,31 +173,25 @@
     }
 
     .btn:hover {
-        background: linear-gradient(to right, #5a00d0, #9000dd);
+        background: linear-gradient(to right, #5E31E3, #9000dd);
     }
 
 </style>
 
-<!-- Sidebar remains -->
-<div class="sidebar">
-    <h2><i>Competitions Platform</i></h2>
-    <ul>
-        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#"><i class="fas fa-bolt"></i> Leaderboard</a></li>
-        <li><a href="#"><i class="fas fa-trophy"></i> Competitions</a></li>
-        <li><a href="#"><i class="fas fa-comments"></i> Chat</a></li>
-        <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
-    </ul>
-    <div class="profile">
-        <ul>
-            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-        </ul>
-    </div>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="#" >🏠 <span>Home</span></a>
+    <a href="#">📊 <span>Leaderboard</span></a>
+    <a href="#">📅 <span>Competitions</span></a>
+    <a href="#">🔔 <span>Notifications</span></a>
+    <a href="#" style="color: #5E31E3;">👤 <span>Profile</span></a>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
 
 <div class="container">
     <div class="login-box">
-        <h2>Sign in</h2>
+        <h2>Login</h2>
         <p>If you don't have an account register</p>
         <p>You can <a href="{{ url_for('auth_views.signup') }}">Register here !</a></p>
 
@@ -193,5 +215,11 @@
         </form>
     </div>
 </div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+</script>
 
 {% endblock %}
