@@ -1,6 +1,4 @@
-{% block content %}
-
-<style>
+{% block content %}<style>
     * {
         margin: 0;
         padding: 0;
@@ -145,32 +143,12 @@
         background-color: #f9f9f9;
     }
 </style>
-
 <div class="sidebar" id="sidebar">
-    <h2>Competitions Platform</h2>
-    <a href="#" style="color: purple;">🏠 <span>Home</span></a>
-    <a href="#">📊 <span>Leaderboard</span></a>
-    <a href="/competitions">📅 <span>Competitions</span></a>
-    <a href="#">💬 <span>Chat</span></a>
-    <a href="#">🔔 <span>Notifications</span></a>
-    <a href="#">👤 <span>Profile</span></a>
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <h2>Competitions Platform</h2> <a href="#" style="color: purple;">🏠 <span>Home</span></a> <a href="#">📊 <span>Leaderboard</span></a> <a href="#">📅 <span>Competitions</span></a> <a href="#">💬 <span>Chat</span></a> <a href="#">🔔 <span>Notifications</span></a> <a href="#">👤 <span>Profile</span></a> <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
-
 <div class="content">
     <div class="leaderboard-wrapper">
-        <div class="top-ranked">
-            {% if leaderboard|length > 1 %}
-            <div class="top-card">🥈 {{ leaderboard[1]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[1]['rating score']|float }}</div>
-            {% endif %}
-            {% if leaderboard|length > 0 %}
-            <div class="top-card first-place">🥇 {{ leaderboard[0]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[0]['rating score']|float }}</div>
-            {% endif %}
-            {% if leaderboard|length > 2 %}
-            <div class="top-card">🥉 {{ leaderboard[2]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[2]['rating score']|float }}</div>
-            {% endif %}
-        </div>
-
+        <div class="top-ranked"> {% if leaderboard|length > 1 %} <div class="top-card">🥈 {{ leaderboard[1]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[1]['rating score']|float }}</div> {% endif %} {% if leaderboard|length > 0 %} <div class="top-card first-place">🥇 {{ leaderboard[0]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[0]['rating score']|float }}</div> {% endif %} {% if leaderboard|length > 2 %} <div class="top-card">🥉 {{ leaderboard[2]['student'] }}<br>Score: {{ '%0.2f' % leaderboard[2]['rating score']|float }}</div> {% endif %} </div>
         <div class="leaderboard-container">
             <table class="leaderboard-table">
                 <thead>
@@ -180,24 +158,18 @@
                         <th>Rating Score</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for student in leaderboard[3:20] %}
-                    <tr>
+                <tbody> {% for student in leaderboard[3:20] %} <tr>
                         <td>{{ student['placement'] }}</td>
                         <td><a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">{{ student['student'] }}</a></td>
                         <td>{{ '%0.2f' % student['rating score']|float }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                    </tr> {% endfor %} </tbody>
             </table>
         </div>
     </div>
 </div>
-
 <script>
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('collapsed');
     }
-</script>
-
-{% endblock %}
+</script>{% endblock %}
+0 commit commentsComments0 (0)Lock conversationCommentSubscribeYou're not receiving notifications from this thread.
