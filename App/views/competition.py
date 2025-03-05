@@ -59,6 +59,8 @@ def add_comp_moderator():
         return (jsonify({'message': f"user added to competition"}),201)
     return (jsonify({'error': f"error adding user to competition"}),500)
 """
+
+# Competition Details
 @comp_views.route('/competitions/<int:id>', methods=['GET'])
 def competition_details(id):
     competition = get_competition(id)
@@ -66,8 +68,8 @@ def competition_details(id):
         return render_template('404.html')
     
     #team = get_all_teams()
-
     #teams = get_participants(competition_name)
+
     if current_user.is_authenticated:
         if session['user_type'] == 'moderator':
             moderator = Moderator.query.filter_by(id=current_user.id).first()
@@ -181,6 +183,7 @@ def confirm_results(comp_name):
 
     return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
 """
+
 @comp_views.route('/confirm_results/<string:comp_name>', methods=['POST'])
 def confirm_results(comp_name):
     pass

@@ -36,11 +36,13 @@
         padding: 20px 5px;
     }
 
-    .sidebar h2, .sidebar a span {
+    .sidebar h2,
+    .sidebar a span {
         display: block;
     }
 
-    .sidebar.collapsed h2, .sidebar.collapsed a span {
+    .sidebar.collapsed h2,
+    .sidebar.collapsed a span {
         display: none;
     }
 
@@ -80,7 +82,7 @@
         transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
 
-    .sidebar.collapsed + .content {
+    .sidebar.collapsed+.content {
         margin-left: 60px;
         width: calc(100% - 60px);
     }
@@ -93,7 +95,7 @@
         transition: width 0.3s ease-in-out;
     }
 
-    .sidebar.collapsed + .content .leaderboard-wrapper {
+    .sidebar.collapsed+.content .leaderboard-wrapper {
         width: 80%;
     }
 
@@ -132,7 +134,8 @@
         text-align: center;
     }
 
-    .leaderboard-table th, .leaderboard-table td {
+    .leaderboard-table th,
+    .leaderboard-table td {
         padding: 12px;
         text-align: center;
         border-bottom: 1px solid #ddd;
@@ -147,7 +150,7 @@
     <h2>Competitions Platform</h2>
     <a href="#" style="color: purple;">🏠 <span>Home</span></a>
     <a href="#">📊 <span>Leaderboard</span></a>
-    <a href="#">📅 <span>Competitions</span></a>
+    <a href="/competitions">📅 <span>Competitions</span></a>
     <a href="#">💬 <span>Chat</span></a>
     <a href="#">🔔 <span>Notifications</span></a>
     <a href="#">👤 <span>Profile</span></a>
