@@ -45,7 +45,6 @@
 
     .sidebar h2, .sidebar a span {
         display: block;
-        font-weight: 700;
     }
 
     .sidebar.collapsed h2, .sidebar.collapsed a span {
@@ -77,7 +76,6 @@
         border-radius: 5px;
         margin-bottom: 20px;
         font-family: 'Poppins', sans-serif;
-        font-weight: bold;
     }
 
     /* Content */
@@ -104,15 +102,13 @@
         text-align: center;
         width: 100%;
         background-color: #2c2f31;
-        padding: 20px;
     }
 
     .page-header h2 {
         font-family: 'Poppins', sans-serif;
         color: white;
         margin: 0;
-        font-size: 30px;
-        font-weight: bold;
+        font-size: 40px;
     }
 
     .create-button {
@@ -171,7 +167,6 @@
         border-radius: 10px;
         background-color: #5E31E3;
         color: #ffffff;
-        font-weight: 500;
         margin: 0;
     }
 
@@ -179,11 +174,12 @@
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-    <h2 class="center">Competitions Platform</h2>
-    <a href="#">🏠 <span>Home</span></a>
+    <h2>Competitions Platform</h2>
+    <a href="/">🏠 <span>Home</span></a>
     <a href="/leaderboard">📊 <span>Leaderboard</span></a>
     <a href="/competitions" style="color: #5E31E3;">📅 <span>Competitions</span></a>
-    <a href="/login">👤 <span>Profile</span></a>
+    <a href="#">🔔 <span>Notifications</span></a>
+    <a href="/profile">👤 <span>Profile</span></a>
     <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
 
