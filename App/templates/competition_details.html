@@ -1,91 +1,268 @@
-{% extends "layout.html" %}
-{% block title %}Competition Details{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
-
-{{ super() }}
-
 {% block content %}
 
 <style>
-    .competition-details {
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        display: flex;
+        background-color: #2c2f31;
+        margin: 0;
+    }
+
+    .sidebar {
+        text-align: center;
+        width: 250px;
+        background-color: black;
+        color: white;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
+        justify-content: space-between;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+        padding: 20px 5px;
+    }
+
+    .sidebar h2 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+        text-align: left;
+        width: 100%;
+        font-weight: 500;
+    }
+
+    .sidebar.collapsed h2, 
+    .sidebar.collapsed a span {
+        display: none;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+
+    .toggle-btn {
+        background-color: white;
+        color: #5E31E3;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .content {
+        margin-left: 250px;
+        padding: 40px 20px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .sidebar.collapsed + .content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .competition-wrapper {
+        width: 90%;
+        max-width: 1200px;
+        background-color: #2c2f31;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .competition-header {
+        text-align: center;
+        color: white;
+        background-color: #5E31E3;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Ensure table headers remain visible */
+    .competition-table thead {
+        display: table-header-group;
+    }
+
+    .competition-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #826dc0;
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        color: white;
+    }
+
+    .competition-table th {
+        background-color: #5E31E3;
+        padding: 15px;
+        font-size: 16px;
+        text-transform: uppercase;
+        color: white;
+    }
+
+    .competition-table td {
+        padding: 18px;
+        background-color: #2c2f31;
+        border-bottom: 1px solid #5E31E3;
+        font-size: 15px;
+    }
+
+    .competition-table tr:hover {
+        background-color: #5E31E3;
+        color: white;
+        cursor: pointer;
+    }
+
+    .competition-table a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .competition-table a:hover {
+        text-decoration: underline;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
         margin-top: 20px;
     }
 
-    .card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #fff;
-        transition: box-shadow 0.3s;
-        color: black;
-    }
-
-    .card:hover {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .teams li {
-        list-style-type: none;
-    }
-
-    .table th,
-    .table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid white;
-    }
-
-    .table tbody tr:hover {
+    .action-buttons button {
         background-color: black;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
     }
 
+    .action-buttons button a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .action-buttons button:hover {
+        background-color: #5E31E3;
+    }
+
+    /* Animation for rows */
+    .competition-table tbody tr {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    }
 </style>
-<div style="display: flex;">
-    <div>
-        <center><h2 style="margin-left: 50px; color: white;">Competition Details</h2></center>
-    </div>
-    <div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="/">🏠 <span>Home</span></a>
+    <a href="/leaderboard">📊 <span>Leaderboard</span></a>
+    <a href="/competitions" style="color: #5E31E3;">📅 <span>Competitions</span></a>
+    <a href="#">🔔 <span>Notifications</span></a>
+    <a href="{% if user.is_authenticated %}/profile{% else %}/login{% endif %}">👤 <span>Profile</span></a>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+    <div class="competition-wrapper">
+        <div class="competition-header">
+            {% if not competition.confirm %}
+                {{ competition.name }} Unofficial Results
+            {% else %}
+                {{ competition.name }} Official Results
+            {% endif %}
+        </div>
+
+        <table class="competition-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Members</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in leaderboard %}
+                <tr>
+                    <td>{{ row['placement'] }}</td>
+                    <td>{{ row['team'] }}</td>
+                    <td>
+                        {% for student in row['members'] %}
+                            <a href="{{ url_for('index_views.student_profile_by_name', name=student) }}">{{ student }},</a>
+                        {% endfor %}
+                    </td>
+                    <td>{{ row['score'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
         {% if session['user_type'] == 'moderator' and moderator in competition.moderators and not competition.confirm %}
-        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; width: 120px; height: 35px; border-radius: 15px; font-family: helvetica;">
-            <a style="color: white" href="{{ url_for('comp_views.add_results_page', comp_id=competition.id) }}">Add Results</a>
-        </button>
-        <button type="button" style="background-color: black; padding: 5px; margin-left: 50px; margin-top: 50px; width: 120px; height: 35px; border-radius: 15px; font-family: helvetica;">
-            <a style="color: white" href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
-        </button>
+        <div class="action-buttons">
+            <button>
+                <a href="{{ url_for('comp_views.add_results_page', comp_id=competition.id) }}">Add Results</a>
+            </button>
+            <button>
+                <a href="{{ url_for('comp_views.confirm_results', comp_name=competition.name) }}">Confirm Results</a>
+            </button>
+        </div>
         {% endif %}
     </div>
 </div>
-<div class="container" style="font-family: serif;">
-    {% if not competition.confirm %}
-        <center> <h4 style="color: white; background-color: black; border-radius: 15px;">{{ competition.name }} Unofficial Results</h4> </center>
-    {% else %}
-        <center> <h4 style="color: white; background-color: black; border-radius: 15px;">{{ competition.name }} Official Results</h4> </center>
-    {% endif %}
-    <table class="table" style="color: white; font-family: verdana;">
-        <thead>
-            <tr>
-                <th><center>Rank</center></th>
-                <th><center>Team</center></th>
-                <th><center>Members</center></th>
-                <th><center>Score</center></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in leaderboard %}
-            <tr>
-                <td><center>{{row['placement']}}</center></td>
-                <td><center>{{row['team']}}</center></td>
-                <td>
-                {% for student in row['members'] %}
-                    <center><a style= "color: white;" href="{{url_for('index_views.student_profile_by_name', name=student)}}">{{student}}</p></center>
-                {% endfor %}
-                </td>
-                <td><center>{{row['score']}}</center></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-<div style="padding: 20px;"></div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let rows = document.querySelectorAll(".competition-table tbody tr");
+        rows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = "1";
+                row.style.transform = "translateY(0)";
+            }, 300 * (rows.length - index)); // Loads from last to first
+        });
+    });
+</script>
+
 {% endblock %}
