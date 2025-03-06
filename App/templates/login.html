@@ -16,7 +16,7 @@
         font-family: 'Poppins', sans-serif;
         display: flex;
         height: 100vh;
-        background: white;
+        background: #2c2f31;
     }
 
     /* Sidebar */
@@ -66,8 +66,8 @@
     }
 
     .toggle-btn {
-        background-color: black;
-        color: white;
+        background-color: white;
+        color: #5E31E3;
         border: none;
         padding: 5px 10px;
         cursor: pointer;
@@ -100,11 +100,12 @@
         font-size: 32px;
         font-weight: 700;
         text-align: left;
+        color: #5E31E3; 
     }
 
     .login-box p {
         font-size: 16px;
-        color: #444;
+        color: white;
         text-align: left;
     }
 
@@ -129,6 +130,7 @@
         border-bottom: 3px solid #444;
         outline: none;
         background: transparent;
+        color: white;
     }
 
     .input-container i {
@@ -144,13 +146,13 @@
         display: flex;
         justify-content: space-between;
         font-size: 16px;
-        color: #444;
+        color: white;
         margin-top: 10px;
     }
 
     .options a {
         text-decoration: none;
-        color: gray;
+        color: white;
     }
 
     /* Enlarge login button */
@@ -198,7 +200,7 @@
         <form action="{{ url_for('auth_views.login') }}" method="post">
             <div class="input-container">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Enter your email address" name="username" required>
+                <input type="text" placeholder="Enter your username or email address" name="username" required>
             </div>
 
             <div class="input-container">
