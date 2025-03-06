@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UWI Competitions Platform</title>
@@ -12,7 +13,8 @@
                     colors: {
                         primary: '#5E31E3',
                         background: '#2c2f31',
-                        textWhite: '#ffffff'
+                        textWhite: '#ffffff',
+                        welcomePurple: '#826dc0'
                     }
                 }
             }
@@ -59,10 +61,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         .sidebar {
+            text-align: center;
             width: 250px;
             background-color: black;
             color: white;
@@ -77,6 +80,7 @@
             transition: width 0.3s ease-in-out;
             overflow: hidden;
             justify-content: space-between;
+            font-family: 'Poppins', sans-serif;
         }
 
         .sidebar.collapsed {
@@ -84,12 +88,9 @@
             padding: 20px 5px;
         }
 
-        .sidebar h2, .sidebar a span {
-            display: block;
-        }
-
-        .sidebar.collapsed h2, .sidebar.collapsed a span {
-            display: none;
+        .sidebar h2 {
+            font-size: 24px;
+            font-weight: 700;
         }
 
         .sidebar a {
@@ -101,6 +102,11 @@
             font-size: 16px;
             text-align: left;
             width: 100%;
+            font-weight: 500;
+        }
+
+        .sidebar.collapsed h2, .sidebar.collapsed a span {
+            display: none;
         }
 
         .sidebar a:hover {
@@ -115,11 +121,12 @@
             cursor: pointer;
             border-radius: 5px;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
         .content {
             margin-left: 250px;
-            padding: 100px 20px;
+            padding: 50px 20px 20px 20px;
             transition: margin-left 0.3s ease-in-out;
         }
 
@@ -135,14 +142,17 @@
         <a href="/leaderboard">📊 <span>Leaderboard</span></a>
         <a href="/competitions">📅 <span>Competitions</span></a>
         <a href="#">🔔 <span>Notifications</span></a>
-        <a href="/">👤 <span>Profile</span></a>
+        <a href="/profile">👤 <span>Profile</span></a>
         <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
     </div>
 
     <div class="content text-center">
-        <h1 class="text-6xl font-light">
-            <span class="text-primary font-semibold" id="dynamic-word"></span> the next <br> generation developer
+        <h1 class="text-5xl font-bold mb-8">
+            <span class="text-welcomePurple">Welcome</span><span class="text-primary"> to the UWI Competitions Platform</span>
         </h1>
+        <h2 class="text-6xl font-light mb-8">
+            <span class="text-primary font-semibold" id="dynamic-word"></span> the next <br> generation of developers
+        </h2>
         <p class="mt-8 text-textWhite text-xl max-w-3xl mx-auto">
             Empowering students to excel through code, collaboration, and competition, as they solve real-world challenges and showcase their technical excellence.
         </p>
