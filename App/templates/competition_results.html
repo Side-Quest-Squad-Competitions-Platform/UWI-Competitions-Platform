@@ -1,42 +1,229 @@
-{% extends "layout.html" %}
-{% block title %}Competition Results{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
-
-{{ super() }}
-
 {% block content %}
-<center><h2 style="color: white;">Competition Results</h2></center>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+</head>
 
-<main class="container" style="padding: 15px; background-color: black; border-radius: 25px;">
-    <form name="addForm" class="card" method="POST" action="{{ url_for('comp_views.add_competition_results', comp_name=competition.name) }}" style="background-color: black; font-family: helvetica;">
-        <div class="card-content">
-            <span style="color: white; font-family: optima;" class="card-title">Enter competition results</span>
+<style>
+    * {
+        padding: 0px;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        background-color: #2c2f31;
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        text-align: center;
+        width: 250px;
+        background-color: black;
+        color: white;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
+        justify-content: space-between;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+        padding: 20px 5px;
+    }
+
+    .sidebar h2, .sidebar a span {
+        display: block;
+    }
+
+    .sidebar.collapsed h2, .sidebar.collapsed a span {
+        display: none;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+        text-align: left;
+        width: 100%;
+        font-weight: 500;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+        transform: scale(1.05);
+    }
+
+    .toggle-btn {
+        background-color: white;
+        color: #5E31E3;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Content */
+    .content {
+        margin-left: 250px;
+        padding: 60px 20px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .sidebar.collapsed + .content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    /* Form Section */
+    .form-section {
+        background-color: black;
+        padding: 15px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 700px;
+        opacity: 0;
+        animation: slideInRight 1s forwards;
+    }
+
+    /* Slide-in animation for form section */
+    @keyframes slideInRight {
+        0% { opacity: 0; transform: translateX(100%); }
+        100% { opacity: 1; transform: translateX(0); }
+    }
+
+    .form-section h2 {
+        color: white;
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .input-field {
+        margin-bottom: 15px;
+        opacity: 0;
+        animation: scaleUpInput 0.8s forwards;
+    }
+
+    /* Scale-up animation for input fields */
+    @keyframes scaleUpInput {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    .input-field label {
+        color: white;
+        font-size: 16px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input-field input {
+        color: white;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 10px;
+        background-color: #333;
+    }
+
+    .input-field input:focus {
+        border-color: #5E31E3;
+    }
+
+    .submit-btn {
+        background-color: #5E31E3;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        opacity: 0;
+        animation: zoomInButton 1s forwards;
+    }
+
+    /* Zoom-in and fade animation for submit button */
+    @keyframes zoomInButton {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    .submit-btn:hover {
+        background-color: #4c27c1;
+    }
+
+</style>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="/">🏠 <span>Home</span></a>
+    <a href="/leaderboard">📊 <span>Leaderboard</span></a>
+    <a href="/competitions" style="color: #5E31E3;">📅 <span>Competitions</span></a>
+    <a href="#">🔔 <span>Notifications</span></a>
+    {% if session['user_type'] %}
+    <a href="/profile">👤 <span>Profile</span></a>
+    {% else %}
+    <a href="/login">👤 <span>Profile</span></a>
+    {% endif %}
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    <div class="form-section">
+        <h2>Competition Results</h2>
+        <form name="addResultsForm" method="POST" action="{{ url_for('comp_views.add_competition_results', comp_name=competition.name) }}">
             <div class="input-field">
-                <input style="color: white;" type="text" name="team_name" placeholder="Enter Team Name" class="validate" required>
-                <label for="team_name">Team Name</label>
+                <label for="team_name">Team Name:</label>
+                <input type="text" name="team_name" placeholder="Enter Team Name" required>
             </div>
             <div class="input-field">
-                <input style="color: white;" type="text" name="student1" placeholder="Enter Student Name" class="validate" required>
-                <label for="team_name">Student 1</label>
+                <label for="student1">Student 1:</label>
+                <input type="text" name="student1" placeholder="Enter Student Name" required>
             </div>
             <div class="input-field">
-                <input style="color: white;" type="text" name="student2" placeholder="Enter Student Name" class="validate" required>
-                <label for="team_name">Student 2</label>
+                <label for="student2">Student 2:</label>
+                <input type="text" name="student2" placeholder="Enter Student Name" required>
             </div>
             <div class="input-field">
-                <input style="color: white;" type="text" name="student3" placeholder="Enter Student Name" class="validate" required>
-                <label for="team_name">Student 3</label>
+                <label for="student3">Student 3:</label>
+                <input type="text" name="student3" placeholder="Enter Student Name" required>
             </div>
             <div class="input-field">
-                <input style="color: white;" type="number" name="score" placeholder="Enter Score" class="validate" required>
-                <label for="score">Score</label>
+                <label for="score">Score:</label>
+                <input type="number" name="score" placeholder="Enter Score" required>
             </div>
-        </div>
-        <div class="card-action">
-            <div class="col s12">
-                <input style="background-color: #343A40; border-radius: 25px;" type="submit" class="btn right" value="Upload Results">
-            </div>
-        </div>
-    </form>
-</main>
+            <button type="submit" class="submit-btn">Upload Results</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+</script>
+
 {% endblock %}
