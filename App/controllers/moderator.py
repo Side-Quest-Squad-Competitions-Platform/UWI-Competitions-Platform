@@ -154,3 +154,9 @@ def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, loc
     if competition:
         return f"Competition '{competition.name}' created successfully"
     return "Failed to create competition"
+
+# Run leaderboard update via command
+def update_leaderboard_by_moderator(moderator_id):
+    cmd = UpdateLeaderboardCommand(moderator_id)
+    cmd.execute()
+    return "Leaderboard updated by moderator"
