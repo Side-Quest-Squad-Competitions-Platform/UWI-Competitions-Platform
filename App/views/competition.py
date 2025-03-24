@@ -31,19 +31,29 @@ def add_new_comp():
 def create_comp():
     data = request.form
     
-    if session['user_type'] == 'moderator':
-        moderator = Moderator.query.filter_by(id=current_user.id).first()
-    else:
-        moderator = None
+    if session.get('user_type') != 'moderator':
+        flash("Unauthorized access")
+        return redirect(url_for('comp_views.create_comp_page'))
 
-    date = data['date']
-    date = date[8] + date[9] + '-' + date[5] + date[6] + '-' + date[0] + date[1] + date[2] + date[3]
+    moderator = Moderator.query.filter_by(id=current_user.id).first()
+    if not moderator:
+        flash("Moderator not found")
+        return redirect(url_for('comp_views.create_comp_page'))
+
+    raw_date = data['date']
+    date = f"{raw_date[8:10]}-{raw_date[5:7]}-{raw_date[0:4]}"
     
-    response = create_competition(moderator.username, data['name'], date, data['location'], data['level'], data['max_score'])
+    result_msg = create_competition_by_moderator(
+        moderator_id=moderator.id,
+        mod_name=moderator.username,
+        comp_name=data['name'],
+        date=date,
+        location=data['location'],
+        level=data['level'],
+        max_score=int(data['max_score'])
+    )
+
     return render_template('competitions.html', competitions=get_all_competitions(), user=current_user)
-    #return (jsonify({'message': "Competition created!"}), 201)
-    #return (jsonify({'error': "Error creating competition"}),500)
-    #return render_template('competitions.html', competitions=get_all_competitions())
 
 #page to create new comp
 @comp_views.route('/createcompetition', methods=['GET'])

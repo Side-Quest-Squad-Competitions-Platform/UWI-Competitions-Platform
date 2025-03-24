@@ -1,5 +1,7 @@
 from App.database import db
 from App.models import Moderator, Competition, Team, CompetitionTeam
+from App.models.commands.create_competition_command import CreateCompetitionCommand
+from App.models.commands.update_leaderboard_command import UpdateLeaderboardCommand
 
 def create_moderator(username, password):
     mod = get_moderator_by_username(username)
@@ -144,3 +146,11 @@ def update_ratings(mod_name, comp_name):
         comp.confirm = True
         print("Results finalized!")
         return True
+
+# Run create competition via command
+def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, location, level, max_score):
+    cmd = CreateCompetitionCommand(moderator_id)
+    competition = cmd.execute(mod_name, comp_name, date, location, level, max_score)
+    if competition:
+        return f"Competition '{competition.name}' created successfully"
+    return "Failed to create competition"
