@@ -3,26 +3,32 @@ from App.models import Competition, Moderator, CompetitionTeam, Team, Student#, 
 from datetime import datetime
 
 def create_competition(mod_name, comp_name, date, location, level, max_score):
-    comp = get_competition_by_name(comp_name)
-    if comp:
-        print(f'{comp_name} already exists!')
+    competition = get_competition_by_name(comp_name)
+    if competition:
+        print(f"Competition '{comp_name}' already exists.")
         return None
-    
-    mod = Moderator.query.filter_by(username=mod_name).first()
-    if mod:
-        newComp = Competition(name=comp_name, date=datetime.strptime(date, "%d-%m-%Y"), location=location, level=level, max_score=max_score)
-        try:
-            newComp.add_mod(mod)
-            db.session.add(newComp)
-            db.session.commit()
-            print(f'New Competition: {comp_name} created!')
-            return newComp
-        except Exception as e:
-            db.session.rollback()
-            print("Something went wrong!")
-            return None
-    else:
-        print("Invalid credentials!")
+
+    moderator = Moderator.query.filter_by(username=mod_name).first()
+    if not moderator:
+        print("Invalid moderator username.")
+        return None
+
+    try:
+        date = datetime.strptime(date, "%d-%m-%Y")
+    except ValueError:
+        print("Invalid date format. Use DD-MM-YYYY.")
+        return None
+
+    new_comp = Competition(
+        name=comp_name,
+        date=date,
+        location=location,
+        level=level,
+        max_score=max_score
+    )
+
+    new_comp.add_mod(moderator)
+    return new_comp
 
 def get_competition_by_name(name):
     return Competition.query.filter_by(name=name).first()
