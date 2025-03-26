@@ -70,7 +70,7 @@ def initialize():
         for competition in reader:
             if competition['comp_name'] != 'TopCoder':
                 update_ratings(competition['mod_name'], competition['comp_name'])
-                update_rankings()
+                UpdateLeaderboardCommand(moderator_id=None).execute()
             #db.session.add(comp)
         #db.session.commit()
     
@@ -119,10 +119,10 @@ def initialize():
     add_results('mod2', 'comp2', "team3", 12)
 
     update_ratings('mod1', 'comp1')
-    update_rankings()
+    UpdateLeaderboardCommand(moderator_id=None).execute()
     
     update_ratings('mod2', 'comp2')
-    update_rankings()
+    UpdateLeaderboardCommand(moderator_id=None).execute()
     """
     print('database intialized')
 
@@ -217,7 +217,7 @@ def add_results_command(mod_name, comp_name, team_name, student1, student2, stud
 @click.argument("comp_name", default="comp1")
 def update_rankings_command(mod_name, comp_name):
     update_ratings(mod_name, comp_name)
-    update_rankings()
+    UpdateLeaderboardCommand(moderator_id=None).execute()
 
 @mod_cli.command("rankings", help="Displays overall rankings")
 def display_rankings_command():

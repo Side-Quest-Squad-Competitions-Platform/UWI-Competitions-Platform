@@ -91,10 +91,10 @@ def init():
     add_results('mod2', 'comp2', "C", 12)
 
     update_ratings('mod1', 'comp1')
-    update_rankings()
+    UpdateLeaderboardCommand(moderator_id=None).execute()
 
     update_ratings('mod2', 'comp2')
-    update_rankings()
+    UpdateLeaderboardCommand(moderator_id=None).execute()
     """
 
     #creates students
@@ -146,7 +146,7 @@ def init():
         for competition in reader:
             if competition['comp_name'] != 'TopCoder':
                 update_ratings(competition['mod_name'], competition['comp_name'])
-                update_rankings()
+                UpdateLeaderboardCommand(moderator_id=None).execute()
             #db.session.add(comp)
         #db.session.commit()
     
@@ -335,7 +335,7 @@ def init_postman():
 
         for competition in reader:
             update_ratings(competition['mod_name'], competition['comp_name'])
-            update_rankings()
+            UpdateLeaderboardCommand(moderator_id=None).execute()
             #db.session.add(comp)
         #db.session.commit()
     
