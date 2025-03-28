@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block title %}{{ student.username }} Rank History{% endblock %}
+{% block content %}
+
+<style>
+.rank-history-wrapper {
+  max-width: 850px;
+  margin: 3vw auto;
+  background-color: #1e1e2f;
+  padding: 2vw;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.rank-history-wrapper h2 {
+  font-size: 2.5vw;
+  margin-bottom: 2vw;
+  color: #ffffff;
+}
+
+#rankHistoryChart {
+  height: 350px !important;
+}
+</style>
+
+<div class="rank-history-wrapper">
+  <h2>{{ student.username }}'s Rank History</h2>
+  <canvas id="rankHistoryChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  fetch(`/rank-history/{{ student.id }}`)
+    .then(res => res.json())
+    .then(data => {
+      const labels = data.map((d, i) => `${d.competition} (${i + 1}) — ${d.date.slice(5)}`);
+      const rankData = data.map(d => d.rank);
+      const ratingData = data.map(d => d.rating);
+
+      const ctx = document.getElementById('rankHistoryChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Rank (lower is better)',
+              data: rankData,
+              borderColor: '#715aff',
+              backgroundColor: 'rgba(113, 90, 255, 0.1)',
+              yAxisID: 'y-rank',
+              tension: 0.3
+            },
+            {
+              label: 'Rating',
+              data: ratingData,
+              borderColor: '#00d68f',
+              backgroundColor: 'rgba(0, 214, 143, 0.1)',
+              yAxisID: 'y-rating',
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: 'white',
+                font: {
+                  size: 14
+                }
+              }
+            }
+          },
+          scales: {
+            'y-rank': {
+              type: 'linear',
+              position: 'left',
+              reverse: true,
+              ticks: { color: 'white' },
+              title: {
+                display: true,
+                text: 'Rank',
+                color: 'white'
+              }
+            },
+            'y-rating': {
+              type: 'linear',
+              position: 'right',
+              ticks: { color: 'white' },
+              title: {
+                display: true,
+                text: 'Rating',
+                color: 'white'
+              }
+            },
+            x: {
+                ticks: {
+                    color: 'white',
+                    maxRotation: 45,
+                    minRotation: 45
+                }
+            }
+          }
+        }
+      });
+    });
+});
+</script>
+
+{% endblock %}
