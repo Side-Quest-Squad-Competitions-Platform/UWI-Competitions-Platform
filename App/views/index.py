@@ -1,3 +1,4 @@
+from App.models.rank_history import RankHistory
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, session
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
@@ -342,3 +343,27 @@ def init_postman():
     competitions_file.close()
 
     return (jsonify({'message': "database_initialized"}),200)
+
+@index_views.route('/rank-history/<int:student_id>')
+def rank_history(student_id):
+    history = RankHistory.query.filter_by(student_id=student_id)\
+        .order_by(RankHistory.recorded_at.asc()).all()
+
+    return jsonify([
+        {
+            "competition": h.competition.name,
+            "date": h.recorded_at.strftime("%Y-%m-%d"),
+            "timestamp": h.recorded_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "rank": h.rank,
+            "rating": h.rating
+        }
+        for h in history
+    ])
+
+
+@index_views.route('/student/<int:student_id>/rank-history')
+def view_rank_history(student_id):
+    student = Student.query.get(student_id)
+    if not student:
+        return "Student not found", 404
+    return render_template('rank_history.html', student=student, user=current_user)

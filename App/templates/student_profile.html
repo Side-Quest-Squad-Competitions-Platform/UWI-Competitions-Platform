@@ -251,19 +251,21 @@ h1 {
             </ul>
         </div>
     </div>
-    {% if user.is_authenticated and user.id==student.id and session['user_type'] == 'student' %}
+
+    {% if user.is_authenticated and user.id == student.id and session['user_type'] == 'student' %}
     <div class="openbutton">
-        <img class="mail-icon" src="{{url_for('static', filename='mailIcon.jpg')}}" alt="Notifications" onclick="openNav()">
+        <img class="mail-icon" src="{{ url_for('static', filename='mailIcon.jpg') }}" alt="Notifications" onclick="openNav()">
     </div>
     {% endif %}
 </div>
+
 <div class="profile-info" style="font-family: helvetica;">
     <div class="student-info">
         <div class="student-image">
-            <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Student Photo" width="80%"></center>
+            <center><img src="{{ url_for('static', filename='defaultProfilePicture.png') }}" alt="Student Photo" width="80%"></center>
         </div>
         <div class="student-username">
-            <p>{{student.username}}</p>
+            <p>{{ student.username }}</p>
         </div> 
     </div>
 
@@ -274,24 +276,31 @@ h1 {
                 {% if student.curr_rank == 0 %}
                 <p>Unranked</p>
                 {% else %}
-                <p>{{student.curr_rank}}</p>
+                <p>{{ student.curr_rank }}</p>
                 {% endif %}
             </div>
             <div class="rating-score">
                 <p>Rating Score</p>
-                <p>{{'%0.2f' % student.rating_score|float}}</p>
+                <p>{{ '%0.2f' % student.rating_score|float }}</p>
             </div>
         </span>
+
+        <div style="margin-top: 2vw;">
+            <a href="{{ url_for('index_views.view_rank_history', student_id=student.id) }}" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.2vw; border-radius: 10px; background-color: #343A40; color: white; text-decoration: none;">
+                View Rank History
+            </a>
+        </div>
+
         <div style="color: white;" class="competition-list">
             <center><p style="font-family: optima;">Participations</p></center>
             <ul>
                 {% for competition in competitions[::-1] %}
                     <li>
                         <div style="width: 90%; text-align: left;">
-                            <p style="margin: 2vw;">{{competition}}</p>
+                            <p style="margin: 2vw;">{{ competition }}</p>
                         </div>
                         <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: white; text-decoration: underline;" href="{{url_for('comp_views.competition_details_by_name', name=competition)}}">Details</a>
+                            <a style="color: white; text-decoration: underline;" href="{{ url_for('comp_views.competition_details_by_name', name=competition) }}">Details</a>
                         </div>
                     </li>
                 {% endfor %}
@@ -299,15 +308,5 @@ h1 {
         </div>
     </div>
 </div>
-    
-    <!---
-    <div class="notifications">
-        <h5>Notifications:</h5>
-        <ul>
-            {% for notification in notifications %}
-                <li>{{ notification.message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    -->
+
 {% endblock %}
