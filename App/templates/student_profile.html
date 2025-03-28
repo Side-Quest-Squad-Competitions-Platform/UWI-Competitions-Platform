@@ -1,312 +1,294 @@
-{% extends "layout.html" %}
-{% block title %}Profile{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
-
-{{ super() }}
-
 {% block content %}
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
 <style>
-.notifications {
-    border: 5px solid #ccc; 
-    padding: 10px; 
-    margin-top: 10px;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
 
-.notifications ul {
-    list-style-type: none;
-}
+    body {
+        display: flex;
+        background-color: #2c2f31;
+        color: white;
+    }
 
-.notifications li {
-    margin-bottom: 15px; 
-}
+    .sidebar {
+        width: 250px;
+        background-color: black;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: width 0.3s ease-in-out;
+    }
 
-.headers {
-    width: 100%;
-    display: flex;
-}
+    .sidebar.collapsed {
+        width: 60px;
+    }
 
-h1 {
-    padding: 2vw 0vw 0vw 2vw;
-    margin: 0vw;
-    /*color: white;*/
-}
-
-.profile-info {
-    width: 100%;
-    padding: 2vw;
-    display: flex;
-}
-
-.student-info {
-    border-radius: 25px;
-    width: 30%;
-    outline-style: solid;
-    background-color: black;
-    /*background-image: linear-gradient(#61677A, #000000);
-    color: white;*/
-}
-
-.student-image {
-    background-color: #343A40;
-    border-radius: 25px;
-    padding: 0vw;
-}
-
-.student-username {
-    color: white;
-    text-align: center;
-    padding: 0vw;
-    font-size: 3vw;
-}
-
-.results-info {
-    width: 70%;
-}
-
-.ranking-info {
-    display: flex;
-    height: 12vw;
-    margin: auto;
-}
-
-.rank {
-    border-radius: 25px;
-    width: 25%;
-    outline-style: solid;
-    margin: auto;
-    text-align: center;
-    font-size: 2vw;
-    color: white;
-    background-color: black;
-    /*background-image: linear-gradient(#61677A, #000000);*/
-}
-
-.rating-score {
-    border-radius: 25px;
-    width: 25%;
-    outline-style: solid;
-    margin: auto;
-    text-align: center;
-    font-size: 2vw;
-    color: white;
-    background-color: black;
-    /*background-image: linear-gradient(#61677A, #000000);*/
-}
-
-.competition-list {
-    width: 95%;
-    margin: auto;
-    margin-top: 1.5vw;
-    outline-style: solid;
-    font-size: 2vw;
-    overflow-y: scroll;
-    height: 20vw;
-    color: white;
-    background-color: black;
-    /*background-image: radial-gradient(#61677A, #000000);*/
-}
-
-.competition-list li {
-    display: flex;
-    padding-left: 2vw;
-    margin: 2vw;
-    font-size: 1.5vw;
-    outline-style: solid;
-    border-radius: 25px;
-    color: white;
-    background-color: #343A40;
-    /*background-image: linear-gradient(#61677A, #000000);*/
-}
-
-.sidepanel {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: #000000;
-    overflow-x: hidden;
-    padding-top: 3vw;
-    transition: 0.5s;
-}
-
-.openbutton {
-    width: 5%;
-    margin-left: auto;
-    margin-top: 2vw;
-    margin-right: 2vw;
-}
-
-.mail-icon {
-    width: 75%;
-    margin-left: auto;
-    margin-right: 2vw;
-    padding-left: auto;
-    padding-right: 0vw;
-    border-radius: 25%;
-    justify-content: flex-end;
-}
-
-.sidepanel-header {
-    display: flex;
-    margin: 0vw 2vw 2vw 2vw;
-}
-
-.sidepanel-title {
-    color: #EEEEEE;
-}
-
-.sidepanel-closebutton {
-    margin-left: auto;
-    margin-right: 0vw;
-}
-
-.sidepanel-content ul li{
-    color: white;
-    background-color: #343A40;
-    border-radius: 25px;
-    height: 5vw;
-    margin: 2vw;
-    padding: 1vw;
-    outline-style: solid;
-}
-
-@media only screen and (max-width: 700px) {
-    .headers {
+    .sidebar h2, .sidebar a span {
         display: block;
     }
 
-    h1 {
+    .sidebar.collapsed h2, .sidebar.collapsed a span {
+        display: none;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+
+    .toggle-btn {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .content {
+        margin-left: 250px;
+        padding: 40px;
+        width: calc(100% - 250px);
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .content.collapsed {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .greeting {
+        font-size: 28px;
         text-align: center;
     }
-    
-    .profile-info {
-        display: block;
+
+    .stats {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
     }
 
-    .student-info {
-        width: 90%;
-        margin: auto;
+    .stat-card {
+        background-color: #343A40;
+        padding: 20px;
+        border-radius: 15px;
+        width: 160px;
+        text-align: center;
+        outline: 2px solid #5E31E3;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideInUp 0.8s forwards;
     }
 
-    .results-info {
-        width: 90%;
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .student-username {
-        font-size: 10vw;
+    .stat-card p {
+        margin: 5px 0;
     }
 
-    .results-info {
+    .graph {
+        height: 300px;
         width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+        background-color: transparent;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        outline: 1px solid #5E31E3;
+        padding: 20px;
     }
 
-    .ranking-info {
-        height: 30vw;
+    .competitions {
+        margin-top: 10px;
     }
 
-    .rank {
-        width: 40%;
-        font-size: 5vw;
+    .competitions h3 {
+        text-align: center;
+        font-size: 20px;
     }
 
-    .rating-score {
-        width: 40%;
-        font-size: 5vw;
+    .competition-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 10px;
     }
 
-    .competition-list {
-        font-size: 5vw;
-        height: 50vw;
-        margin-top: 5vw;
+    .competition-card {
+        background-color: #343A40;
+        width: 220px;
+        height: 100px;
+        padding: 15px;
+        border-radius: 15px;
+        outline: 1px solid #5E31E3;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.6s forwards;
     }
 
-    .competition-list li {
-        font-size: 5vw;
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-}
+
+    .competition-card p {
+        margin: 6px 0;
+    }
+
+    .competition-card a {
+        color: #00d1ff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .competition-card a:hover {
+        text-decoration: underline;
+    }
 </style>
-    
-<div class="headers">
-    <div>
-        <h2 style="color: white; padding-left: 50px;">Profile</h2>
-    </div>
 
-    <div id="sidepanel" class="sidepanel" style="font-family: helvetica;">
-        <div class="sidepanel-header">
-            <div class="sidepanel-title">
-                <h4>Notifications</h4>
-            </div>
-            <div class="sidepanel-closebutton">
-                <button onclick="closeNav()">X</button>
-            </div>
-        </div>
-        <div class="sidepanel-content">
-            <ul>
-                {% for notification in student.notifications[::-1] %}
-                    <li>{{ notification.message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
-    {% if user.is_authenticated and user.id == student.id and session['user_type'] == 'student' %}
-    <div class="openbutton">
-        <img class="mail-icon" src="{{ url_for('static', filename='mailIcon.jpg') }}" alt="Notifications" onclick="openNav()">
-    </div>
-    {% endif %}
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="/">🏠 <span>Home</span></a>
+    <a href="/leaderboard">📊 <span>Leaderboard</span></a>
+    <a href="/competitions">📅 <span>Competitions</span></a>
+    <a href="/notifications">🔔 <span>Notifications</span></a>
+    <a href="/profile" style="color: #5E31E3;">👤 <span>Profile</span></a>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
 
-<div class="profile-info" style="font-family: helvetica;">
-    <div class="student-info">
-        <div class="student-image">
-            <center><img src="{{ url_for('static', filename='defaultProfilePicture.png') }}" alt="Student Photo" width="80%"></center>
+<!-- Content -->
+<div class="content" id="mainContent">
+    <div class="greeting">Hi {{ student.username }}</div>
+
+    <div class="stats">
+        <div class="stat-card" style="animation-delay: 0.25s;">
+            <p>Current rating</p>
+            <p><strong>{{ '%0.2f' % student.rating_score|float }}</strong></p>
         </div>
-        <div class="student-username">
-            <p>{{ student.username }}</p>
-        </div> 
+        <div class="stat-card" style="animation-delay: 0.5s;">
+            <p>Current rank</p>
+            <p><strong>{% if student.curr_rank == 0 %}Unranked{% else %}{{ student.curr_rank }}{% endif %}</strong></p>
+        </div>
+        <div class="stat-card" style="animation-delay: 0.75s;">
+            <p>Competitions</p>
+            <p><strong>{{ competitions|length }}</strong></p>
+        </div>
     </div>
 
-    <div class="results-info">
-        <span class="ranking-info">
-            <div class="rank">
-                <p>Rank</p>
-                {% if student.curr_rank == 0 %}
-                <p>Unranked</p>
-                {% else %}
-                <p>{{ student.curr_rank }}</p>
-                {% endif %}
-            </div>
-            <div class="rating-score">
-                <p>Rating Score</p>
-                <p>{{ '%0.2f' % student.rating_score|float }}</p>
-            </div>
-        </span>
+    <div class="graph">
+        <canvas id="rankPreviewChart"></canvas>
+    </div>
 
-        <div style="margin-top: 2vw;">
-            <a href="{{ url_for('index_views.view_rank_history', student_id=student.id) }}" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.2vw; border-radius: 10px; background-color: #343A40; color: white; text-decoration: none;">
-                View Rank History
-            </a>
-        </div>
+    <div style="text-align: center;">
+        <a href="{{ url_for('index_views.view_rank_history', student_id=student.id) }}" 
+           style="margin-top: 20px; background-color: #5E31E3; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: 600;">
+            View Full Rank History
+        </a>
+    </div>
 
-        <div style="color: white;" class="competition-list">
-            <center><p style="font-family: optima;">Participations</p></center>
-            <ul>
-                {% for competition in competitions[::-1] %}
-                    <li>
-                        <div style="width: 90%; text-align: left;">
-                            <p style="margin: 2vw;">{{ competition }}</p>
-                        </div>
-                        <div style="width: 10%; text-align: right; margin: 2vw;">
-                            <a style="color: white; text-decoration: underline;" href="{{ url_for('comp_views.competition_details_by_name', name=competition) }}">Details</a>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+    <div class="competitions">
+        <h3>Participated competitions:</h3>
+        <div class="competition-grid">
+            {% for comp in competitions[::-1] %}
+            <div class="competition-card" style="animation-delay: {{ loop.index * 0.15 }}s;">
+                <p><strong>{{ comp }}</strong></p>
+                <a href="{{ url_for('comp_views.competition_details_by_name', name=comp) }}">Details</a>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
 
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+        document.getElementById('mainContent').classList.toggle('collapsed');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch(`/rank-history/{{ student.id }}`)
+            .then(res => res.json())
+            .then(data => {
+                const labels = data.map(d => d.competition);
+                const ratingData = data.map(d => d.rating);
+
+                const ctx = document.getElementById("rankPreviewChart").getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Rating',
+                            data: ratingData,
+                            borderColor: '#5E31E3',
+                            backgroundColor: 'transparent',
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                ticks: { color: 'white' },
+                                grid: { color: '#444' }
+                            },
+                            x: {
+                                ticks: { color: 'white' },
+                                grid: { color: '#444' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white' }
+                            }
+                        }
+                    }
+                });
+            });
+    });
+</script>
 {% endblock %}
