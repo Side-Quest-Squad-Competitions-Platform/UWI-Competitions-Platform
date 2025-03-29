@@ -83,8 +83,8 @@
     }
 
     .greeting {
-        font-size: 28px;
-        text-align: center;
+        font-size: 38px;
+        text-align: left;
     }
 
     .stats {
@@ -186,6 +186,24 @@
     .competition-card a:hover {
         text-decoration: underline;
     }
+    .logout-container {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    }
+    .logout-btn {
+        background-color: #5E31E3;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .logout-btn:hover {
+        background-color: #343A40;
+    }
 </style>
 
 <!-- Sidebar -->
@@ -201,6 +219,9 @@
 
 <!-- Content -->
 <div class="content" id="mainContent">
+    <div class="logout-container">
+        <a href="{{ url_for('auth_views.logout') }}" class="logout-btn">Logout</a>
+    </div>
     <div class="greeting">Hi {{ student.username }}</div>
 
     <div class="stats">
