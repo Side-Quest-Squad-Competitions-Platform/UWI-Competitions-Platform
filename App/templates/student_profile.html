@@ -221,9 +221,12 @@
 
 <!-- Content -->
 <div class="content" id="mainContent">
-    <div class="logout-container">
-        <a href="{{ url_for('auth_views.logout') }}" class="logout-btn">Logout</a>
-    </div>
+    {% if current_user.is_authenticated %}
+        <div class="logout-container">
+            <a href="{{ url_for('auth_views.logout') }}" class="logout-btn">Logout</a>
+        </div>
+    {% endif %}
+
     <div class="greeting">Hi {{ student.username }}</div>
 
     <div class="stats">
