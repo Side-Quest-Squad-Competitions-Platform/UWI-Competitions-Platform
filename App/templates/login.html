@@ -5,9 +5,12 @@
 </head>
 
 <style>
-*{
-    font-family: 'Poppins', sans-serif;
-}
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }   
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
     body {
@@ -21,20 +24,22 @@
 
     /* Sidebar */
     .sidebar {
-        width: 210px;
-        height: 100vh;
-        background: black;
+        text-align: center;
+        width: 250px;
+        background-color: black;
         color: white;
         padding: 20px;
+        height: 100vh;
         position: fixed;
         left: 0;
-        top: -30;
+        top: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         transition: width 0.3s ease-in-out;
         overflow: hidden;
         justify-content: space-between;
+        font-family: 'Poppins', sans-serif;
     }
 
     .sidebar.collapsed {
@@ -59,6 +64,7 @@
         font-size: 16px;
         text-align: left;
         width: 100%;
+        font-weight: 500;
     }
 
     .sidebar a:hover {
@@ -73,6 +79,7 @@
         cursor: pointer;
         border-radius: 5px;
         margin-bottom: 20px;
+        font-weight: bold;
     }
 
     /* Centering the login form */
@@ -175,7 +182,7 @@
     }
 
     .btn:hover {
-        background: linear-gradient(to right, #5E31E3, #9000dd);
+        background: linear-gradient(to right, #242cc5, #740aad);
     }
 
 </style>

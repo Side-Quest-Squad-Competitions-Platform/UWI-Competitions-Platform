@@ -178,7 +178,10 @@ def profile():
 
     if user_type == 'student':
         template = student_profile(id)
-
+    else:
+        # Handle unexpected user_type case
+        template = render_template('login.html', message="Invalid user type")
+    
     return template
 
 @index_views.route('/student_profile/<int:id>', methods=['GET'])
