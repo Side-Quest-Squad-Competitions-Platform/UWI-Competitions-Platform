@@ -175,12 +175,11 @@ def profile():
     
     if user_type == 'moderator':
         template = moderator_profile(id)
-
-    if user_type == 'student':
+    elif user_type == 'student':
         template = student_profile(id)
     else:
         # Handle unexpected user_type case
-        template = render_template('login.html', message="Invalid user type")
+        template = render_template('login.html')
     
     return template
 
