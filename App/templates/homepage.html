@@ -161,9 +161,29 @@
             Empowering students to excel through code, collaboration, and competition, as they solve real-world challenges and showcase their technical excellence.
         </p>
         <div class="mt-12 space-x-6">
-            <a href="/login" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block">Login</a>
-            <a href="/signup" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block">Signup</a>
+            {% if session['user_type'] %}
+                <a href="/competitions" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-[#6b52a3]">
+                    View Competitions
+                </a>
+                <a href="/leaderboard" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-[#6b52a3]">
+                    View Leaderboard
+                </a>
+                <form action="/logout" method="GET" class="inline-block mt-4">
+                    <button type="submit" class="bg-red-600 text-white px-8 py-4 rounded-lg text-lg inline-block transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-red-700">
+                        Logout
+                    </button>
+                </form>
+            {% else %}
+                <a href="/login" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-[#6b52a3]">
+                    Login
+                </a>
+                <a href="/signup" class="bg-primary text-white px-8 py-4 rounded-lg text-lg inline-block transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-[#6b52a3]">
+                    Signup
+                </a>
+            {% endif %}
         </div>
+        
+        
     </div>
 </body>
 </html>

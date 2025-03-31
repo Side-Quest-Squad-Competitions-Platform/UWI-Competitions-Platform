@@ -1,4 +1,7 @@
 {% block content %}
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+</head>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
@@ -102,12 +105,11 @@
         border-radius: 10px;
     }
 
-    /* Top performers layout */
     .top-ranked {
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        gap: 60px; /* Increase spacing */
+        gap: 60px;
         margin-bottom: 40px;
         width: 100%;
         max-width: 1000px;
@@ -128,14 +130,17 @@
         justify-content: center;
         height: 120px;
         flex: 1;
-        min-width: 180px; /* Ensures they don't shrink too much */
+        min-width: 180px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s forwards;
     }
 
     .first-place {
-        transform: scale(1.3); /* Make first place larger */
+        transform: scale(1.3);
         background-color: #5E31E3;
-        height: 160px; /* Taller */
-        min-width: 220px; /* Wider */
+        height: 160px;
+        min-width: 220px;
     }
 
     .top-card a {
@@ -148,7 +153,6 @@
         text-decoration: underline;
     }
 
-    /* Leaderboard table */
     .leaderboard-table {
         width: 100%;
         border-collapse: collapse;
@@ -188,16 +192,33 @@
     .leaderboard-table a:hover {
         text-decoration: underline;
     }
+
+    /* Animation Keyframe */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .leaderboard-row {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s forwards;
+    }
 </style>
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
     <h2>Competitions Platform</h2>
     <a href="/">🏠 <span>Home</span></a>
-    <a href="/leaderboard" style="color: #5E31E3;" >📊 <span>Leaderboard</span></a>
+    <a href="/leaderboard" style="color: #5E31E3;">📊 <span>Leaderboard</span></a>
     <a href="/competitions">📅 <span>Competitions</span></a>
-    <a href="#">🔔 <span>Notifications</span></a>
-    <!-- Add check for logged-in status here -->
+    <a href="/notifications">🔔 <span>Notifications</span></a>
     <a href="{% if user.is_authenticated %}/profile{% else %}/login{% endif %}">👤 <span>Profile</span></a>
     <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
@@ -207,7 +228,7 @@
     <div class="leaderboard-wrapper">
         <div class="top-ranked">
             {% if leaderboard|length > 1 %}
-            <div class="top-card">🥈 
+            <div class="top-card" style="animation-delay: 0.1s;">🥈 
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[1]['student']) }}">
                     {{ leaderboard[1]['student'] }}
                 </a>
@@ -215,7 +236,7 @@
             </div>
             {% endif %}
             {% if leaderboard|length > 0 %}
-            <div class="top-card first-place">🥇 
+            <div class="top-card first-place" style="animation-delay: 0.3s;">🥇 
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[0]['student']) }}">
                     {{ leaderboard[0]['student'] }}
                 </a>
@@ -223,7 +244,7 @@
             </div>
             {% endif %}
             {% if leaderboard|length > 2 %}
-            <div class="top-card">🥉 
+            <div class="top-card" style="animation-delay: 0.5s;">🥉 
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[2]['student']) }}">
                     {{ leaderboard[2]['student'] }}
                 </a>
@@ -242,9 +263,13 @@
             </thead>
             <tbody>
                 {% for student in leaderboard[3:20] %}
-                <tr>
+                <tr class="leaderboard-row" style="animation-delay: {{ loop.index0 * 0.1 + 0.7 }}s;">
                     <td>{{ student['placement'] }}</td>
-                    <td><a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">{{ student['student'] }}</a></td>
+                    <td>
+                        <a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">
+                            {{ student['student'] }}
+                        </a>
+                    </td>
                     <td>{{ '%0.2f' % student['rating score']|float }}</td>
                 </tr>
                 {% endfor %}
@@ -258,5 +283,4 @@
         document.getElementById('sidebar').classList.toggle('collapsed');
     }
 </script>
-
 {% endblock %}

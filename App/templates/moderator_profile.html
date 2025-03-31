@@ -1,132 +1,230 @@
-{% extends "layout.html" %}
-{% block title %}Profile{% endblock %}
-{% block page %}UWI Competitions Platform{% endblock %}
-
-{{ super() }}
-
 {% block content %}
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+</head>
 
 <style>
-h1 {
-    padding: 2vw 0vw 0vw 2vw;
-    margin: 0vw;
-    /*color: white;*/
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
 
-.profile-info {
-    width: 100%;
-    height: 90%;
-    padding: 2vw;
-    display: flex;
-}
+    body {
+        display: flex;
+        background-color: #2c2f31;
+        color: white;
+    }
 
-.moderator-info {
-    background-color: black;
-    border-radius: 25px;
-    width: 30%;
-    height: 80%;
-    outline-style: solid;
-    /*background-image: linear-gradient(#61677A, #000000);
-    color: white;*/
-}
-
-.moderator-image {
-    background-color: #343A40;
-    border-radius: 25px;
-    padding-top: 0vw;
-}
-
-.moderator-username {
-    text-align: center;
-    padding: 0vw;
-    font-size: 3vw;
-}
-
-.competitions-info {
-    width: 70%;
-    height: 80%;
-}
-
-.competition-list {
-    background-color: black;
-    width: 90%;
-    margin: 3vw 2vw 2vw 2vw;
-    outline-style: solid;
-    font-size: 2vw;
-    overflow-y: scroll;
-    height: 25vw;
-    color: white;
-    /*background-image: radial-gradient(#61677A, #000000);*/
-}
-
-.competition-list li {
-    display: flex;
-    padding-left: 2vw;
-    margin: 2vw;
-    font-size: 1.5vw;
-    outline-style: solid;
-    color: white;
-    background-color: #343A40;
-    /*background-image: linear-gradient(#61677A, #000000);*/
-}
-
-@media only screen and (max-width: 700px) {
-    h1 {
+    .sidebar {
+        width: 250px;
+        background-color: black;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: width 0.3s ease-in-out;
         text-align: center;
     }
-    
-    .profile-info {
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .sidebar h2, .sidebar a span {
         display: block;
     }
 
-    .moderator-info {
-        width: 90%;
-        margin: auto;
+    .sidebar.collapsed h2, .sidebar.collapsed a span {
+        display: none;
     }
 
-    .moderator-username {
-        font-size: 10vw;
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
     }
 
-    .competition-list {
-        font-size: 5vw;
-        height: 50vw;
-        margin-top: 5vw;
+    .sidebar a:hover {
+        background-color: #333;
     }
 
-    .competition-list li {
-        font-size: 5vw;
+    .toggle-btn {
+        background-color: white;
+        color: #5E31E3;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
     }
-}
+
+    .content {
+        margin-left: 250px;
+        padding: 40px;
+        width: calc(100% - 250px);
+        transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+
+    .content.collapsed {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .greeting {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .logout-container {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+    }
+
+    .logout-btn {
+        background-color: #5E31E3;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .logout-btn:hover {
+        background-color: #343A40;
+    }
+
+    .profile-container {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+    }
+
+    .moderator-card {
+        background-color: #343A40;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        outline: 2px solid #5E31E3;
+        width: 220px;
+    }
+
+    .moderator-card img {
+        width: 100%;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+
+    .moderator-card p {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .competitions-list {
+        flex: 1;
+    }
+
+    .competitions-list h3 {
+        margin-bottom: 10px;
+    }
+
+    .competition-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .competition-card {
+        background-color: #343A40;
+        width: 220px;
+        height: 100px;
+        padding: 15px;
+        border-radius: 15px;
+        outline: 1px solid #5E31E3;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .competition-card a {
+        color: #00d1ff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .competition-card a:hover {
+        text-decoration: underline;
+    }
 </style>
 
-<div>
-    <center><h2 style="color: white;">Profile</h2></center>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h2>Competitions Platform</h2>
+    <a href="/">🏠 <span>Home</span></a>
+    <a href="/leaderboard">📊 <span>Leaderboard</span></a>
+    <a href="/competitions">📅 <span>Competitions</span></a>
+    <a href="/notifications">🔔 <span>Notifications</span></a>
+    <a href="/profile" style="color: #5E31E3;">👤 <span>Profile</span></a>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
-<div class="profile-info" style="font-family: helvetica;">
-    <div class="moderator-info">
-        <div class="moderator-image">
-            <center><img src="{{url_for('static', filename='defaultProfilePicture.png')}}" alt="Moderator Photo" width="80%"></center>
-        </div>
-        <div style="color: white;" class="moderator-username">
-            <p>{{moderator.username}}</p>
-        </div> 
+
+<!-- Content -->
+<div class="content" id="mainContent">
+    <div class="logout-container">
+        <a href="{{ url_for('auth_views.logout') }}" class="logout-btn">Logout</a>
     </div>
 
-    <div class="competition-list">
-        <center><p style="font-family: optima;">Competitions</p></center>
-        <ul>
-            {% for competition in moderator.competitions %}
-                <li>
-                    <div style="width: 90%; text-align: left;">
-                        <p style="margin: 2vw;">{{competition.name}}</p>
-                    </div>
-                    <div style="width: 10%; text-align: right; margin: 2vw;">
-                        <a style="color: white;" href="{{url_for('comp_views.competition_details_by_name', name=competition.name)}}">Details</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="greeting">Hi {{ moderator.username }}</div>
+
+    <div class="profile-container">
+        <div class="moderator-card">
+            <img src="{{ url_for('static', filename='defaultProfilePicture.png') }}" alt="Moderator Photo">
+            <p>{{ moderator.username }}</p>
+            <p style="font-size: 14px; margin-top: 10px;">Moderator Profile</p>
+        </div>
+
+        <div class="competitions-list">
+            <h3>Managed Competitions:</h3>
+            <div class="competition-grid">
+                {% for competition in moderator.competitions %}
+                <div class="competition-card" style="animation-delay: {{ loop.index * 0.1 }}s;">
+                    <p><strong>{{ competition.name }}</strong></p>
+                    <a href="{{ url_for('comp_views.competition_details_by_name', name=competition.name) }}">Details</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+        document.getElementById('mainContent').classList.toggle('collapsed');
+    }
+</script>
 {% endblock %}
