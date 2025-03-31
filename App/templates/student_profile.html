@@ -19,8 +19,10 @@
     }
 
     .sidebar {
+        text-align: center;
         width: 250px;
         background-color: black;
+        color: white;
         padding: 20px;
         height: 100vh;
         position: fixed;
@@ -28,13 +30,16 @@
         top: 0;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        align-items: center;
         transition: width 0.3s ease-in-out;
-        text-align: center;
+        overflow: hidden;
+        justify-content: space-between;
+        font-family: 'Poppins', sans-serif;
     }
 
     .sidebar.collapsed {
         width: 60px;
+        padding: 20px 5px;
     }
 
     .sidebar h2, .sidebar a span {
@@ -52,7 +57,9 @@
         text-decoration: none;
         padding: 10px;
         font-size: 16px;
-        text-align: center;
+        text-align: left;
+        width: 100%;
+        font-weight: 500;
     }
 
     .sidebar a:hover {
@@ -60,14 +67,15 @@
     }
 
     .toggle-btn {
-        background-color: black;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-weight: bold;
-    }
+            background-color: white;
+            color: #5E31E3;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
     .content {
         margin-left: 250px;
