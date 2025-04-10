@@ -369,3 +369,14 @@ def view_rank_history(student_id):
     if not student:
         return "Student not found", 404
     return render_template('rank_history.html', student=student, user=current_user)
+
+@index_views.route('/notifications', methods=['GET'])
+@login_required
+def notifications_view():
+    if session.get('user_type') == 'student':
+        user_notifications = list(reversed(current_user.notifications))
+    else:
+        user_notifications = []
+
+    notifications_list = [notification.get_json() for notification in user_notifications]
+    return render_template('notifications.html', notifications=notifications_list, user=current_user)
