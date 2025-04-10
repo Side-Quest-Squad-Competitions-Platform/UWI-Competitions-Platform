@@ -11,8 +11,8 @@ class CreateCompetitionCommand(Command):
     def __init__(self, moderator_id):
         super().__init__(moderator_id)
 
-    def execute(self, mod_name, comp_name, date, location, level, max_score):
-        competition = create_competition(mod_name, comp_name, date, location, level, max_score)
+    def execute(self, mod_names, comp_name, date, location, level, max_score):
+        competition = create_competition(mod_names, comp_name, date, location, level, max_score)
         if competition:
             self.competition_id = competition.id
             db.session.add(self)

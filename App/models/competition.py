@@ -22,8 +22,6 @@ class Competition(db.Model):
         self.location = location
         self.level = level
         self.max_score = max_score
-        self.moderators = []
-        self.teams = []
     
     def add_mod(self, mod):
         for m in self.moderators:
@@ -34,7 +32,6 @@ class Competition(db.Model):
         comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
         try:
             self.moderators.append(mod)
-            mod.competitions.append(self)
             db.session.commit()
             print(f'{mod.username} was added to {self.name}!')
             return comp_mod

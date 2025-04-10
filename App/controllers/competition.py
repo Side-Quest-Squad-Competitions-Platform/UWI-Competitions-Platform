@@ -2,16 +2,20 @@ from App.database import db
 from App.models import Competition, Moderator, CompetitionTeam, Team, Student#, Student, Admin, competition_student
 from datetime import datetime
 
-def create_competition(mod_name, comp_name, date, location, level, max_score):
+def create_competition(mod_names, comp_name, date, location, level, max_score):
     competition = get_competition_by_name(comp_name)
     if competition:
         print(f"Competition '{comp_name}' already exists.")
         return None
 
-    moderator = Moderator.query.filter_by(username=mod_name).first()
-    if not moderator:
-        print("Invalid moderator username.")
-        return None
+    moderator_list = []
+    for mod_name in mod_names.split(','):
+        mod_name = mod_name.strip()
+        moderator = Moderator.query.filter_by(username=mod_name).first()
+        if moderator:
+            moderator_list.append(moderator)
+        else:
+            print(f"Invalid moderator username: {mod_name}")
 
     try:
         date = datetime.strptime(date, "%d-%m-%Y")
@@ -26,9 +30,20 @@ def create_competition(mod_name, comp_name, date, location, level, max_score):
         level=level,
         max_score=max_score
     )
+    
+    try:
+        db.session.add(new_comp)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error saving competition '{comp_name}': {e}")
+        return None
+    
+    for mod in moderator_list:
+        new_comp.add_mod(mod)
 
-    new_comp.add_mod(moderator)
     return new_comp
+
 
 def get_competition_by_name(name):
     return Competition.query.filter_by(name=name).first()
