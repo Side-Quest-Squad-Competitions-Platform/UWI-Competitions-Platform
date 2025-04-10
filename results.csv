@@ -1,52 +1,52 @@
-mod_name,comp_name,team_name,student1,student2,student3,score
-robert,Code Wars,Runtime Terrors,james,steven,emily,18
-robert,Code Wars,Beyond Infinity,isabella,richard,jessica,17
-robert,Code Wars,Scrum Lords,mark,eric,ryan,16
-robert,Code Wars,Little Bits,mary,ashley,jennifer,12
-robert,Code Wars,Binary Beasts,andrew,matthew,sarah,10
-robert,Code Wars,Hypertext Assassins,anthony,michael,john,6
-robert,Code Wars,Bugs Bunnies,david,elizabeth,jonathan,6
-robert,Code Wars,Hex Clan,william,charles,brian,4
-benjamin,CodeJam,Scrum Lords,mark,eric,brandon,21
-benjamin,CodeJam,Runtime Terrors,james,steven,emily,18
-benjamin,CodeJam,Beyond Infinity,isabella,richard,jessica,18
-benjamin,CodeJam,Morse Coders,ryan,kevin,samantha,18
-benjamin,CodeJam,Binary Beasts,andrew,matthew,sarah,12
-benjamin,CodeJam,Little Bits,mary,ashley,jennifer,12
-benjamin,CodeJam,Hex Clan,william,charles,brian,9
-benjamin,CodeJam,Hypertext Assassins,anthony,michael,john,5
-benjamin,CodeJam,Bugs Bunnies,david,elizabeth,jonathan,5
-debra,Hacker Cup,Runtime Terrors,james,steven,kevin,16
-debra,Hacker Cup,Morse Coders,emily,eric,samantha,16
-debra,Hacker Cup,Scrum Lords,mark,brandon,ryan,16
-debra,Hacker Cup,Beyond Infinity,isabella,richard,jessica,14
-debra,Hacker Cup,Code Raiders,mary,jennifer,amy,11
-debra,Hacker Cup,Binary Beasts,andrew,matthew,sarah,7
-debra,Hacker Cup,Little Bits,amy,ashley,elizabeth,7
-debra,Hacker Cup,Hex Clan,william,charles,brian,7
-robert,CodeSprint,Runtime Terrors,james,steven,kevin,12
-robert,CodeSprint,Scrum Lords,brandon,eric,mark,12
-robert,CodeSprint,Beyond Infinity,isabella,michelle,jessica,10
-robert,CodeSprint,Morse Coders,emily,richard,ryan,10
-robert,CodeSprint,Hex Clan,william,charles,brian,5
-robert,CodeSprint,Binary Beasts,andrew,jason,sarah,5
-patricia,KickStart,Morse Coders,emily,richard,mark,19
-patricia,KickStart,Runtime Terrors,james,steven,kevin,16
-patricia,KickStart,Beyond Infinity,isabella,michelle,jessica,16
-patricia,KickStart,Scrum Lords,brandon,eric,ryan,16
-patricia,KickStart,Binary Beasts,andrew,jason,sarah,11
-patricia,KickStart,Bugs Bunnies,david,elizabeth,jonathan,9
-patricia,KickStart,Code Raiders,mary,jennifer,amy,7
-patricia,KickStart,Hypertext Assassins,anthony,michael,john,5
-patricia,KickStart,Hex Clan,william,charles,brian,5
-debra,RunTime,Beyond Infinity,isabella,michelle,jessica,15
-debra,RunTime,Scrum Lords,mark,eric,ryan,15
-debra,RunTime,Runtime Terrors,james,steven,emily,13
-debra,RunTime,Code Raiders,mary,jennifer,amy,13
-debra,RunTime,Bugs Bunnies,david,elizabeth,jonathan,7
-debra,RunTime,Morse Coders,richard,kevin,brandon,7
-debra,RunTime,Hypertext Assassins,anthony,michael,john,4
-raymond,TopCoder,Scrum Lords,mark,eric,ryan,11
-raymond,TopCoder,Morse Coders,richard,kevin,brandon,9
-raymond,TopCoder,Beyond Infinity,isabella,michelle,jessica,8
-raymond,TopCoder,Code Raiders,mary,jennifer,amy,6
+mod_names,comp_name,team_name,student1,student2,student3,score
+"robert,benjamin,raymond",Code Wars,Runtime Terrors,james,steven,emily,18
+"robert,benjamin,raymond",Code Wars,Beyond Infinity,isabella,richard,jessica,17
+"robert,benjamin,raymond",Code Wars,Scrum Lords,mark,eric,ryan,16
+"robert,benjamin,raymond",Code Wars,Little Bits,mary,ashley,jennifer,12
+"robert,benjamin,raymond",Code Wars,Binary Beasts,andrew,matthew,sarah,10
+"robert,benjamin,raymond",Code Wars,Hypertext Assassins,anthony,michael,john,6
+"robert,benjamin,raymond",Code Wars,Bugs Bunnies,david,elizabeth,jonathan,6
+"robert,benjamin,raymond",Code Wars,Hex Clan,william,charles,brian,4
+"lucas,patricia",CodeJam,Scrum Lords,mark,eric,brandon,21
+"lucas,patricia",CodeJam,Runtime Terrors,james,steven,emily,18
+"lucas,patricia",CodeJam,Beyond Infinity,isabella,richard,jessica,18
+"lucas,patricia",CodeJam,Morse Coders,ryan,kevin,samantha,18
+"lucas,patricia",CodeJam,Binary Beasts,andrew,matthew,sarah,12
+"lucas,patricia",CodeJam,Little Bits,mary,ashley,jennifer,12
+"lucas,patricia",CodeJam,Hex Clan,william,charles,brian,9
+"lucas,patricia",CodeJam,Hypertext Assassins,anthony,michael,john,5
+"lucas,patricia",CodeJam,Bugs Bunnies,david,elizabeth,jonathan,5
+"debra,patricia,emma",Hacker Cup,Runtime Terrors,james,steven,kevin,16
+"debra,patricia,emma",Hacker Cup,Morse Coders,emily,eric,samantha,16
+"debra,patricia,emma",Hacker Cup,Scrum Lords,mark,brandon,ryan,16
+"debra,patricia,emma",Hacker Cup,Beyond Infinity,isabella,richard,jessica,14
+"debra,patricia,emma",Hacker Cup,Code Raiders,mary,jennifer,amy,11
+"debra,patricia,emma",Hacker Cup,Binary Beasts,andrew,matthew,sarah,7
+"debra,patricia,emma",Hacker Cup,Little Bits,amy,ashley,elizabeth,7
+"debra,patricia,emma",Hacker Cup,Hex Clan,william,charles,brian,7
+"raymond,debra,lucas",CodeSprint,Runtime Terrors,james,steven,kevin,12
+"raymond,debra,lucas",CodeSprint,Scrum Lords,brandon,eric,mark,12
+"raymond,debra,lucas",CodeSprint,Beyond Infinity,isabella,michelle,jessica,10
+"raymond,debra,lucas",CodeSprint,Morse Coders,emily,richard,ryan,10
+"raymond,debra,lucas",CodeSprint,Hex Clan,william,charles,brian,5
+"raymond,debra,lucas",CodeSprint,Binary Beasts,andrew,jason,sarah,5
+"emma,alice",KickStart,Morse Coders,emily,richard,mark,19
+"emma,alice",KickStart,Runtime Terrors,james,steven,kevin,16
+"emma,alice",KickStart,Beyond Infinity,isabella,michelle,jessica,16
+"emma,alice",KickStart,Scrum Lords,brandon,eric,ryan,16
+"emma,alice",KickStart,Binary Beasts,andrew,jason,sarah,11
+"emma,alice",KickStart,Bugs Bunnies,david,elizabeth,jonathan,9
+"emma,alice",KickStart,Code Raiders,mary,jennifer,amy,7
+"emma,alice",KickStart,Hypertext Assassins,anthony,michael,john,5
+"emma,alice",KickStart,Hex Clan,william,charles,brian,5
+"alice,benjamin",RunTime,Beyond Infinity,isabella,michelle,jessica,15
+"alice,benjamin",RunTime,Scrum Lords,mark,eric,ryan,15
+"alice,benjamin",RunTime,Runtime Terrors,james,steven,emily,13
+"alice,benjamin",RunTime,Code Raiders,mary,jennifer,amy,13
+"alice,benjamin",RunTime,Bugs Bunnies,david,elizabeth,jonathan,7
+"alice,benjamin",RunTime,Morse Coders,richard,kevin,brandon,7
+"alice,benjamin",RunTime,Hypertext Assassins,anthony,michael,john,4
+"patricia,emma,raymond",TopCoder,Scrum Lords,mark,eric,ryan,11
+"patricia,emma,raymond",TopCoder,Morse Coders,richard,kevin,brandon,9
+"patricia,emma,raymond",TopCoder,Beyond Infinity,isabella,michelle,jessica,8
+"patricia,emma,raymond",TopCoder,Code Raiders,mary,jennifer,amy,6

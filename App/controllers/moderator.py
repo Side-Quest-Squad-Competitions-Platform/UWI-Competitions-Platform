@@ -72,41 +72,48 @@ def add_mod(mod1_name, comp_name, mod2_name):
     else:
         return comp.add_mod(mod2)
                 
-def add_results(mod_name, comp_name, team_name, score):
-    mod = Moderator.query.filter_by(username=mod_name).first()
+def add_results(mod_names, comp_name, team_name, score):
     comp = Competition.query.filter_by(name=comp_name).first()
     teams = Team.query.filter_by(name=team_name).all()
 
-    if not mod:
-        print(f'{mod_name} was not found!')
+    if not comp:
+        print(f'{comp_name} was not found!')
         return None
-    else:
-        if not comp:
-            print(f'{comp_name} was not found!')
-            return None
-        elif comp.confirm:
-            print(f'Results for {comp_name} have already been finalized!')
-            return None
-        elif mod not in comp.moderators:
-            print(f'{mod_name} is not authorized to add results for {comp_name}!')
-            return None
-        else:
-            for team in teams:
-                comp_team = CompetitionTeam.query.filter_by(comp_id=comp.id, team_id=team.id).first()
+    elif comp.confirm:
+        print(f'Results for {comp_name} have already been finalized!')
+        return None
 
-                if comp_team:
-                    comp_team.points_earned = score
-                    comp_team.rating_score = (score/comp.max_score) * 20 * comp.level
-                    try:
-                        db.session.add(comp_team)
-                        db.session.commit()
-                        print(f'Score successfully added for {team_name}!')
-                        return comp_team
-                    except Exception as e:
-                        db.session.rollback()
-                        print("Something went wrong!")
-                        return None
+    # Check if any moderator in mod_names is authorized
+    authorized = False
+    for mod_name in mod_names.split(','):
+        mod_name = mod_name.strip()
+        mod = Moderator.query.filter_by(username=mod_name).first()
+        if mod and mod in comp.moderators:
+            authorized = True
+            break
+
+    if not authorized:
+        print(f'No authorized moderators found in {mod_names} for {comp_name}!')
+        return None
+
+    for team in teams:
+        comp_team = CompetitionTeam.query.filter_by(comp_id=comp.id, team_id=team.id).first()
+        if comp_team:
+            comp_team.points_earned = score
+            comp_team.rating_score = (score / comp.max_score) * 20 * comp.level
+            try:
+                db.session.add(comp_team)
+                db.session.commit()
+                print(f'Score successfully added for {team_name}!')
+                return comp_team
+            except Exception as e:
+                db.session.rollback()
+                print("Something went wrong!")
+                return None
+
+    print(f'Team {team_name} not found in {comp_name}')
     return None
+
 
 
 def update_ratings(mod_name, comp_name):
