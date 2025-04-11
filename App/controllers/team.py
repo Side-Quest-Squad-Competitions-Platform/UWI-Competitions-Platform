@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Team, Competition, Student, Moderator
+from App.models import Team, Competition, Student, Moderator, Notification
 
 def create_team(team_name, students):
     team = Team(name=team_name)
@@ -91,11 +91,21 @@ def add_team(mod_names, comp_name, team_name, students):
             print('Team was not created!')
             return None
 
-    team = create_team(team_name, students)
-    if team:
-        return comp.add_team(team)
-    else:
-        return None
+        team = create_team(team_name, students)
+        
+        if team:
+            comp_team = comp.add_team(team)
+            if comp_team:
+                # After successfully adding the team, notify each student
+                for stud in team.students:
+                    message = f'You have been added to the competition: {comp.name}.'
+                    notification = Notification(stud.id, message)
+                    stud.add_notification(notification)
+                return comp_team
+            else:
+                return None
+        else:
+            return None
 
 """
 def add_results(mod_name, comp_name, team_name, students, score):
