@@ -1,10 +1,11 @@
 {% block content %}
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <style>
-
     * {
         padding: 0px;
         box-sizing: border-box;
@@ -164,6 +165,41 @@
         animation: zoomInButton 1s forwards; /* Animation for submit button */
     }
 
+    .select2-container--default .select2-selection--single {
+        background-color: #444; /* Grey background */
+        color: white;
+        border: 1px solid #666;
+        border-radius: 10px;
+        padding: 6px 10px;
+        height: 42px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: white;
+        line-height: 28px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 42px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        font-size: 14px;
+        color: #aaa;
+    }
+
+    .select2-dropdown {
+        background-color: #333;
+        color: white;
+    }
+
+    .select2-results__option {
+        padding: 10px;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: #5E31E3;
+    }
+
     /* Zoom-in and fade animation for submit button */
     @keyframes zoomInButton {
         0% { opacity: 0; transform: scale(0.8); }
@@ -216,15 +252,67 @@
                 <label for="max_score">Competition Max Obtainable Score:</label>
                 <input type="number" name="max_score" max="20" placeholder="Enter Max Value (Max 20)" required>
             </div>
+
+            <!-- Moderator Dropdown -->
+            <div class="input-field" id="moderator-dropdown" style="display: none; width: 100%;">
+                <label for="moderators">Select or Enter Moderators:</label>
+                <select name="moderators[]" id="moderator" class="moderator-select" multiple="multiple" required>
+                    {% for mod in moderators %}
+                        <option value="{{ mod }}">{{ mod }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Add Moderators Button -->
+            <div class="input-field" style="text-align: left;">
+                <button type="button" class="toggle-btn" onclick="toggleModerators()">➕ Add Moderators</button>
+            </div>
+
             <button type="submit" class="submit-btn">Create Competition</button>
         </form>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('collapsed');
     }
+
+    function toggleModerators() {
+        const dropdown = document.getElementById('moderator-dropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+
+    $(document).ready(function () {
+        $('.moderator-select').select2({
+            placeholder: "Choose or type moderator",
+            allowClear: true,
+            width: '100%',
+            tags: true,
+            createTag: function (params) {
+                let term = $.trim(params.term);
+                if (term === '') {
+                    return null;
+                }
+                return {
+                    id: term,
+                    text: term,
+                    newOption: true
+                };
+            },
+            templateResult: function (data) {
+                let $result = $("<span></span>");
+                $result.text(data.text);
+                if (data.newOption) {
+                    $result.append(" <em>(new)</em>");
+                }
+                return $result;
+            }
+        });
+    });
 </script>
 
 {% endblock %}

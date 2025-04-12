@@ -43,6 +43,8 @@ def create_comp():
     raw_date = data['date']
     date = f"{raw_date[8:10]}-{raw_date[5:7]}-{raw_date[0:4]}"
     
+    moderator_usernames = request.form.getlist('moderators[]')
+
     result_msg = create_competition_by_moderator(
         moderator_id=moderator.id,
         mod_name=moderator.username,
@@ -52,6 +54,13 @@ def create_comp():
         level=data['level'],
         max_score=int(data['max_score'])
     )
+
+    # Add additional moderators
+    comp = get_competition_by_name(data['name'])
+    if comp:
+        for uname in moderator_usernames:
+            if uname != moderator.username:
+                add_mod(moderator.username, comp.name, uname)
 
     return render_template('competitions.html', competitions=get_all_competitions(), user=current_user)
 

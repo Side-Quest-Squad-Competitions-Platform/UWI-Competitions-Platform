@@ -5,6 +5,7 @@ from flask_login import login_required, login_user, current_user, logout_user
 from App.models import db
 from App.controllers import *
 import csv
+from App.controllers import get_all_students
 
 index_views = Blueprint('index_views', __name__, template_folder='../templates')
 
@@ -380,3 +381,24 @@ def notifications_view():
 
     notifications_list = [notification.get_json() for notification in user_notifications]
     return render_template('notifications.html', notifications=notifications_list, user=current_user)
+
+
+@index_views.route('/createcompetition', methods=['GET'])
+@login_required
+def create_competition_page():
+    if session.get('user_type') != 'moderator':
+        return redirect('/login')
+
+    moderators = get_all_moderators()
+    students = get_all_students()
+
+    mod_usernames = [mod.username for mod in moderators]
+    student_usernames = [stud.username for stud in students]
+
+    return render_template(
+        'competition_creation.html',
+        moderators=mod_usernames,
+        students=student_usernames,
+        user=current_user
+    )
+

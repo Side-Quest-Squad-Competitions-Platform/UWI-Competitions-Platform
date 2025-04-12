@@ -16,7 +16,6 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    /* Sidebar */
     .sidebar {
         text-align: center;
         width: 250px;
@@ -33,7 +32,6 @@
         transition: width 0.3s ease-in-out;
         overflow: hidden;
         justify-content: space-between;
-        font-family: 'Poppins', sans-serif;
     }
 
     .sidebar.collapsed {
@@ -78,7 +76,6 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    /* Content */
     .content {
         margin-left: 250px;
         padding: 60px 20px;
@@ -94,7 +91,6 @@
         width: calc(100% - 60px);
     }
 
-    /* Form Section */
     .form-section {
         background-color: black;
         padding: 15px;
@@ -105,7 +101,6 @@
         animation: slideInRight 1s forwards;
     }
 
-    /* Slide-in animation for form section */
     @keyframes slideInRight {
         0% { opacity: 0; transform: translateX(100%); }
         100% { opacity: 1; transform: translateX(0); }
@@ -124,7 +119,6 @@
         animation: scaleUpInput 0.8s forwards;
     }
 
-    /* Scale-up animation for input fields */
     @keyframes scaleUpInput {
         0% { opacity: 0; transform: scale(0.8); }
         100% { opacity: 1; transform: scale(1); }
@@ -163,7 +157,6 @@
         animation: zoomInButton 1s forwards;
     }
 
-    /* Zoom-in and fade animation for submit button */
     @keyframes zoomInButton {
         0% { opacity: 0; transform: scale(0.8); }
         100% { opacity: 1; transform: scale(1); }
@@ -173,6 +166,12 @@
         background-color: #4c27c1;
     }
 
+    .error-msg {
+        color: #ff5c5c;
+        font-size: 14px;
+        margin-top: 4px;
+        display: none;
+    }
 </style>
 
 <!-- Sidebar -->
@@ -212,8 +211,8 @@
                 <input type="text" name="student3" placeholder="Enter Student Name" required>
             </div>
             <div class="input-field">
-                <label for="score">Score:</label>
-                <input type="number" name="score" max="20" placeholder="Enter Score" required>
+                <label for="score">Score (Max: {{ competition.max_score }}):</label>
+                <input type="number" id="score-input" name="score" max="{{ competition.max_score }}" min = "0" placeholder="Enter Score" required>
             </div>
             <button type="submit" class="submit-btn">Upload Results</button>
         </form>
@@ -224,6 +223,25 @@
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('collapsed');
     }
-</script>
 
+    function validateScore() {
+    const scoreInput = document.getElementById("score-input");
+    const errorMsg = document.getElementById("score-error");
+    const max = parseInt(scoreInput.getAttribute("max"));
+    const value = parseInt(scoreInput.value);
+
+    if (value > max) {
+        errorMsg.textContent = `Score cannot exceed ${max}.`;
+        errorMsg.style.display = "block";
+        return false;
+    } else if (value < 0) {
+        errorMsg.textContent = "Score cannot be negative.";
+        errorMsg.style.display = "block";
+        return false;
+    }
+
+    errorMsg.style.display = "none";
+    return true;
+}
+</script>
 {% endblock %}

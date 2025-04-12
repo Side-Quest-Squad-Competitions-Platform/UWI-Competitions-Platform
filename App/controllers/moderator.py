@@ -82,6 +82,9 @@ def add_results(mod_names, comp_name, team_name, score):
     elif comp.confirm:
         print(f'Results for {comp_name} have already been finalized!')
         return None
+    elif score > comp.max_score:
+        print(f'Score {score} exceeds the maximum allowed score of {comp.max_score} for {comp_name}.')
+        return None
 
     # Check if any moderator in mod_names is authorized
     authorized = False
