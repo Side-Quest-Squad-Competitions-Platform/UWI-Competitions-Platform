@@ -202,9 +202,11 @@
 
 <!-- Content -->
 <div class="content" id="mainContent">
+    {% if current_user.is_authenticated %}
     <div class="logout-container">
         <a href="{{ url_for('auth_views.logout') }}" class="logout-btn">Logout</a>
     </div>
+    {% endif %}
 
     <div class="greeting">Hi {{ moderator.username }}</div>
 

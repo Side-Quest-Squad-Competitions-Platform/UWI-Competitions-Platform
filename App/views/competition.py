@@ -150,14 +150,27 @@ def get_results(id):
 @comp_views.route('/add_results/<int:comp_id>', methods=['GET'])
 def add_results_page(comp_id):
     competition = get_competition(comp_id)
+
+    if not competition:
+        return render_template('404.html')
+
     if session['user_type'] == 'moderator':
         moderator = Moderator.query.filter_by(id=current_user.id).first()
     else:
         moderator = None
 
     leaderboard = display_competition_results(competition.name)
+    students = get_all_students()
 
-    return render_template('competition_results.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
+    return render_template(
+        'competition_results.html',
+        competition=competition,
+        moderator=moderator,
+        leaderboard=leaderboard,
+        students=students,  
+        user=current_user
+    )
+
 
 @comp_views.route('/add_results/<string:comp_name>', methods=['POST'])
 def add_competition_results(comp_name):
