@@ -234,23 +234,25 @@
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[1]['student']) }}">
                     {{ leaderboard[1]['student'] }}
                 </a>
-                <br>Score: {{ '%0.2f' % leaderboard[1]['rating score']|float }}
+                <br>Score: {{ leaderboard[1]['rating score'] | round | int }}
             </div>
             {% endif %}
+            
             {% if leaderboard|length > 0 %}
             <div class="top-card first-place" style="animation-delay: 0.3s;">🥇 
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[0]['student']) }}">
                     {{ leaderboard[0]['student'] }}
                 </a>
-                <br>Score: {{ '%0.2f' % leaderboard[0]['rating score']|float }}
+                <br>Score: {{ leaderboard[0]['rating score'] | round | int }}
             </div>
             {% endif %}
+            
             {% if leaderboard|length > 2 %}
             <div class="top-card" style="animation-delay: 0.5s;">🥉 
                 <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[2]['student']) }}">
                     {{ leaderboard[2]['student'] }}
                 </a>
-                <br>Score: {{ '%0.2f' % leaderboard[2]['rating score']|float }}
+                <br>Score: {{ leaderboard[2]['rating score'] | round | int }}
             </div>
             {% endif %}
         </div>
@@ -272,7 +274,7 @@
                             {{ student['student'] }}
                         </a>
                     </td>
-                    <td>{{ '%0.2f' % student['rating score']|float }}</td>
+                    <td>{{ student['rating score'] | round | int }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
