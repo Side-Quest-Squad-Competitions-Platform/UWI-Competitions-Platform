@@ -163,6 +163,25 @@
     .btn:hover {
         background: linear-gradient(to right, #242cc5, #740aad);
     }
+    .input-container select {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 3px solid #444;
+    background-color: #2c2f31;
+    color: white;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    cursor: pointer;
+    }
+
+    .input-container select option {
+        background-color: #2c2f31;
+        color: white;
+    }
 </style>
 
 <div class="sidebar" id="sidebar">
@@ -188,22 +207,31 @@
                 <i class="fas fa-envelope"></i>
                 <input type="text" placeholder="Enter your email address" name="email" required>
             </div>
-
+        
             <div class="input-container">
                 <i class="fas fa-user"></i>
                 <input type="text" placeholder="Enter your username" name="username" required>
             </div>
-
+        
             <div class="input-container">
                 <i class="fas fa-lock"></i>
                 <input type="password" placeholder="Enter your Password" name="password" required>
             </div>
-
+        
             <div class="input-container">
                 <i class="fas fa-lock"></i>
                 <input type="password" placeholder="Confirm Password" name="confirm_password" required>
             </div>
-
+        
+            <div class="input-container">
+                <label for="user_type" style="color: white; font-weight: bold;">Select user type</label>
+                <select name="user_type" required>
+                    <option value="" disabled selected>Select user type</option>
+                    <option value="student">Student</option>
+                    <option value="moderator">Moderator</option>
+                </select>
+            </div>
+        
             <button type="submit" class="btn">Register</button>
         </form>
     </div>

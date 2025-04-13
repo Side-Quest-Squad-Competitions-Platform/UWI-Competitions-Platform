@@ -116,15 +116,23 @@ def logout():
 @auth_views.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        student = create_student(request.form['username'], request.form['password'])
-        
-        if student:
-            #flash('Username not available!', category="error")
-            #return jsonify({'message': 'Username already used!'})
-            if request.form['username'] == student.username:
-            #flash('Account created successfully!', category="success")
-                login_user(student)
-                session['user_type'] = 'student'
-                return render_template('homepage.html', user=current_user)#, competitions=get_all_competitions())
-    
-    return render_template('signup.html', user=current_user)
+        username = request.form['username']
+        password = request.form['password']
+        user_type = request.form['user_type']  # Get from dropdown
+
+        if user_type == 'student':
+            user = create_student(username, password)
+            session['user_type'] = 'student'
+        elif user_type == 'moderator':
+            user = create_moderator(username, password)
+            session['user_type'] = 'moderator'
+        else:
+            return render_template('signup.html', error="Invalid user type")
+
+        if user:
+            login_user(user)
+            return redirect('/profile')
+        else:
+            return render_template('signup.html', error="Signup failed")
+
+    return render_template('signup.html')
