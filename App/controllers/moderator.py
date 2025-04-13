@@ -130,32 +130,66 @@ def update_ratings(mod_name, comp_name):
         print(f'{comp_name} was not found!')
         return None
     elif comp.confirm:
-        print(f'Results for {comp_name} has already been finalized!')
+        print(f'Results for {comp_name} have already been finalized!')
         return None
     elif mod not in comp.moderators:
-        print(f'{mod_name} is not authorized to add results for {comp_name}!')
+        print(f'{mod_name} is not authorized to confirm results for {comp_name}!')
         return None
     elif len(comp.teams) == 0:
-        print(f'No teams found. Results can not be confirmed!')
+        print(f'No teams found. Results cannot be confirmed!')
         return None
-    else:
-        comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
 
-        for comp_team in comp_teams:
-            team = Team.query.filter_by(id=comp_team.team_id).first()
+    comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
 
-            for stud in team.students:
-                stud.rating_score = (stud.rating_score*stud.comp_count + comp_team.rating_score)/(stud.comp_count+1)
-                stud.comp_count += 1
-                try:
-                    db.session.add(stud)
-                    db.session.commit()
-                except Exception as e:
-                    db.session.rollback()
+    # Get average rating of each team
+    team_ratings = {}
+    for comp_team in comp_teams:
+        team = Team.query.get(comp_team.team_id)
+        if team and team.students:
+            avg_rating = sum([s.rating_score for s in team.students]) / len(team.students)
+            team_ratings[team.id] = avg_rating
 
+    # Sort teams by score (descending)
+    sorted_teams = sorted(comp_teams, key=lambda ct: ct.points_earned, reverse=True)
+
+    # Perform pairwise Elo updates
+    for i, comp_team in enumerate(sorted_teams):
+        team = Team.query.get(comp_team.team_id)
+        team_avg = team_ratings.get(team.id, 0)
+
+        for j, other_team_ct in enumerate(sorted_teams):
+            if i == j:
+                continue
+
+            other_team = Team.query.get(other_team_ct.team_id)
+            opp_avg = team_ratings.get(other_team.id, 0)
+
+            # actual score: 1 if this team ranked higher, 0 if lower
+            actual_score = 1 if i < j else 0
+            expected_score = 1 / (1 + 10 ** ((opp_avg - team_avg) / 400))
+
+            for student in team.students:
+                k = get_dynamic_k(student)
+                delta = k * (actual_score - expected_score)
+                student.rating_score = max(0, student.rating_score + delta)
+
+    # Finalize: update comp_count and commit
+    for comp_team in comp_teams:
+        team = Team.query.get(comp_team.team_id)
+        for student in team.students:
+            student.comp_count += 1
+            db.session.add(student)
+
+    try:
         comp.confirm = True
-        print("Results finalized!")
+        db.session.add(comp)
+        db.session.commit()
+        print("Results finalized with Elo rating updates.")
         return True
+    except Exception as e:
+        db.session.rollback()
+        print("Failed to finalize results:", e)
+        return None
 
 # Run create competition via command
 def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, location, level, max_score):
@@ -164,3 +198,12 @@ def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, loc
     if competition:
         return f"Competition '{competition.name}' created successfully"
     return "Failed to create competition"
+
+def get_dynamic_k(student):
+    # Example: lower K for experienced students
+    if student.comp_count < 5:
+        return 40
+    elif student.comp_count < 10:
+        return 30
+    else:
+        return 20

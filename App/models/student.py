@@ -13,7 +13,7 @@ class Student(User):
 
     def __init__(self, username, password):
         super().__init__(username, password)
-        self.rating_score = 0
+        self.rating_score = 1200
         self.comp_count = 0
         self.curr_rank = 0
         self.prev_rank = 0
