@@ -20,7 +20,7 @@ class UpdateLeaderboardCommand(Command):
         curr_high = students[0].rating_score if students else 0
         curr_rank = 1
 
-        # Get the most recent competition (optional logic — adjust if you track by comp)
+        # Get the most recent competition
         latest_comp = Competition.query.order_by(Competition.date.desc()).first()
 
         for student in students:
@@ -53,7 +53,7 @@ class UpdateLeaderboardCommand(Command):
                 notification = Notification(student.id, message)
                 student.notifications.append(notification)
 
-                # 🔁 Add rank history entry
+                # Add rank history entry
                 if latest_comp:
                     rank_history = RankHistory(
                         student_id=student.id,

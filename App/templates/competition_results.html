@@ -156,6 +156,19 @@
         opacity: 0;
         animation: zoomInButton 1s forwards;
     }
+    .input-field select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    }
+
+    .input-field select:focus {
+    border-color: #5E31E3;
+    }
 
     @keyframes zoomInButton {
         0% { opacity: 0; transform: scale(0.8); }
@@ -200,15 +213,32 @@
             </div>
             <div class="input-field">
                 <label for="student1">Student 1:</label>
-                <input type="text" name="student1" placeholder="Enter Student Name" required>
+                <select name="student1" required>
+                    <option value="" disabled selected>Select Student 1</option>
+                    {% for student in students %}
+                        <option value="{{ student.username }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
             </div>
+            
             <div class="input-field">
                 <label for="student2">Student 2:</label>
-                <input type="text" name="student2" placeholder="Enter Student Name" required>
+                <select name="student2" required>
+                    <option value="" disabled selected>Select Student 2</option>
+                    {% for student in students %}
+                        <option value="{{ student.username }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
             </div>
+            
             <div class="input-field">
                 <label for="student3">Student 3:</label>
-                <input type="text" name="student3" placeholder="Enter Student Name" required>
+                <select name="student3" required>
+                    <option value="" disabled selected>Select Student 3</option>
+                    {% for student in students %}
+                        <option value="{{ student.username }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="input-field">
                 <label for="score">Score (Max: {{ competition.max_score }}):</label>
