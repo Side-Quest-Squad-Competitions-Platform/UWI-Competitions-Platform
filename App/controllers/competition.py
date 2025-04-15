@@ -16,6 +16,7 @@ def create_competition(mod_names, comp_name, date, location, level, max_score):
             moderator_list.append(moderator)
         else:
             print(f"Invalid moderator username: {mod_name}")
+            return None
 
     try:
         date = datetime.strptime(date, "%d-%m-%Y")
