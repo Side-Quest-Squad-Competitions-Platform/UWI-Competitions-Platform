@@ -1,8 +1,8 @@
 mod_names,comp_name,date,location,level,max_score
-"robert,benjamin,raymond",Code Wars,26-01-2024T11:00:00,St. Augustine,1,25
-"lucas,patricia",CodeJam,14-02-2024T13:00:00,El Dorado,1,27
-"debra,patricia,emma",Hacker Cup,23-02-2024T15:00:00,Macoya,1,22
-"raymond,debra,lucas",CodeSprint,11-03-2024T16:00:00,West Moorings,2,25
-"emma,alice",KickStart,17-03-2024T10:00:00,Trincity,1,24
-"alice,benjamin",RunTime,29-03-2024T9:00:00,St. Augustine,2,25
-"patricia,emma,raymond",TopCoder,08-04-2024T8:00:00,Port-of-Spain,2,23
+"robert,benjamin,raymond",Code Wars,26-01-2024T11:00,St. Augustine,1,25
+"lucas,patricia",CodeJam,14-02-2024T13:00,El Dorado,1,27
+"debra,patricia,emma",Hacker Cup,23-02-2024T15:00,Macoya,1,22
+"raymond,debra,lucas",CodeSprint,11-03-2024T16:00,West Moorings,2,25
+"emma,alice",KickStart,17-03-2024T10:00,Trincity,1,24
+"alice,benjamin",RunTime,29-03-2024T9:00,St. Augustine,2,25
+"patricia,emma,raymond",TopCoder,08-04-2024T8:00,Port-of-Spain,2,23
