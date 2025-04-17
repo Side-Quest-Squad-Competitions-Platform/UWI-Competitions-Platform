@@ -220,11 +220,12 @@
 
 <div class="competitions-card">
     {% for competition in competitions[::-1] %}
-    <div class="card" style="animation-delay: {{ loop.index0 * 0.1 }}s;">
+    <div class="card" style="animation-delay: '{{ loop.index0 * 0.1|round(1) ~ 's' }}'">
         <a href="{{url_for('comp_views.competition_details', id=competition.id)}}">
             <h3>{{ competition.name }}</h3>
             <div>
                 <p><strong>Date: </strong>{{ competition.date.strftime("%d %B %Y") }}</p>
+                <p><strong>Time: </strong>{{ competition.date.strftime("%I:%M %p") }}</p>
                 <p><strong>Location: </strong>{{ competition.location }}</p>
                 <p><strong>Level: </strong>{{ competition.level }}</p>
                 <p><strong>Max Score: </strong>{{ competition.max_score }}</p>

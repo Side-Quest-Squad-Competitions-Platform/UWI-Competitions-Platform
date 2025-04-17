@@ -43,7 +43,11 @@ def create_comp():
         return redirect(url_for('comp_views.create_comp_page'))
 
     raw_date = data['date']
-    date = f"{raw_date[8:10]}-{raw_date[5:7]}-{raw_date[0:4]}"
+    raw_time = data['time']
+
+    datetime_string = f"{raw_date}T{raw_time}"
+    datetime_obj = datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M")
+    formatted = datetime_obj.strftime("%d-%m-%YT%H:%M")
     
     moderator_usernames = request.form.getlist('moderators[]')
 
@@ -51,7 +55,7 @@ def create_comp():
         moderator_id=moderator.id,
         mod_name=moderator.username,
         comp_name=data['name'],
-        date=date,
+        date=formatted,
         location=data['location'],
         level=data['level'],
         max_score=int(data['max_score'])

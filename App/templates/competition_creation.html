@@ -1,4 +1,5 @@
 {% block content %}
+
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <!-- Select2 CSS -->
@@ -43,11 +44,13 @@
         padding: 20px 5px;
     }
 
-    .sidebar h2, .sidebar a span {
+    .sidebar h2,
+    .sidebar a span {
         display: block;
     }
 
-    .sidebar.collapsed h2, .sidebar.collapsed a span {
+    .sidebar.collapsed h2,
+    .sidebar.collapsed a span {
         display: none;
     }
 
@@ -91,7 +94,7 @@
         transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
     }
 
-    .sidebar.collapsed + .content {
+    .sidebar.collapsed+.content {
         margin-left: 60px;
         width: calc(100% - 60px);
     }
@@ -104,13 +107,21 @@
         width: 100%;
         max-width: 700px;
         opacity: 0;
-        animation: slideInRight 1s forwards; /* Animation for form section */
+        animation: slideInRight 1s forwards;
+        /* Animation for form section */
     }
 
     /* Slide-in animation for form section */
     @keyframes slideInRight {
-        0% { opacity: 0; transform: translateX(100%); }
-        100% { opacity: 1; transform: translateX(0); }
+        0% {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 
     .form-section h2 {
@@ -123,13 +134,21 @@
     .input-field {
         margin-bottom: 15px;
         opacity: 0;
-        animation: scaleUpInput 0.8s forwards; /* Scaling input fields */
+        animation: scaleUpInput 0.8s forwards;
+        /* Scaling input fields */
     }
 
     /* Scale-up animation for input fields */
     @keyframes scaleUpInput {
-        0% { opacity: 0; transform: scale(0.8); }
-        100% { opacity: 1; transform: scale(1); }
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
     .input-field label {
@@ -162,11 +181,13 @@
         width: 100%;
         font-size: 16px;
         opacity: 0;
-        animation: zoomInButton 1s forwards; /* Animation for submit button */
+        animation: zoomInButton 1s forwards;
+        /* Animation for submit button */
     }
 
     .select2-container--default .select2-selection--single {
-        background-color: #444; /* Grey background */
+        background-color: #444;
+        /* Grey background */
         color: white;
         border: 1px solid #666;
         border-radius: 10px;
@@ -182,6 +203,7 @@
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 42px;
     }
+
     .select2-container--default .select2-selection--single .select2-selection__placeholder {
         font-size: 14px;
         color: #aaa;
@@ -202,8 +224,15 @@
 
     /* Zoom-in and fade animation for submit button */
     @keyframes zoomInButton {
-        0% { opacity: 0; transform: scale(0.8); }
-        100% { opacity: 1; transform: scale(1); }
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
     .submit-btn:hover {
@@ -241,6 +270,10 @@
                 <input type="date" name="date" required>
             </div>
             <div class="input-field">
+                <label for="time">Competition Time:</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+            <div class="input-field">
                 <label for="location">Competition Location:</label>
                 <input type="text" name="location" placeholder="Enter Competition Location" required>
             </div>
@@ -258,7 +291,7 @@
                 <label for="moderators">Select or Enter Moderators:</label>
                 <select name="moderators[]" id="moderator" class="moderator-select" multiple="multiple" required>
                     {% for mod in moderators %}
-                        <option value="{{ mod }}">{{ mod }}</option>
+                    <option value="{{ mod }}">{{ mod }}</option>
                     {% endfor %}
                 </select>
             </div>

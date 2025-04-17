@@ -63,6 +63,7 @@ class Competition(db.Model):
             "id": self.id,
             "name": self.name,
             "date": self.date.strftime("%d-%m-%Y"),
+            "time": self.date.strftime("%I:%M %p"),
             "location": self.location,
             "level" : self.level,
             "max_score" : self.max_score,
