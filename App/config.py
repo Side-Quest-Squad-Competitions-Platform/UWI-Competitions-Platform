@@ -24,6 +24,7 @@ def load_config():
     config['PREFERRED_URL_SCHEME'] = 'https'
     config['UPLOADED_PHOTOS_DEST'] = "App/uploads"
     config["JWT_TOKEN_LOCATION"] = ["headers"]
+    #hi
     return config
 
 config = load_config()
