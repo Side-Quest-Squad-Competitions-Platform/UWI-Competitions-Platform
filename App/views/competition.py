@@ -43,6 +43,7 @@ def create_comp():
         return redirect(url_for('comp_views.create_comp_page'))
 
     raw_date = data['date']
+    
     date = f"{raw_date[8:10]}-{raw_date[5:7]}-{raw_date[0:4]}"
     
     moderator_usernames = request.form.getlist('moderators[]')

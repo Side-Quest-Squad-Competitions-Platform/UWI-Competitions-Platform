@@ -19,7 +19,7 @@ def create_competition(mod_names, comp_name, date, location, level, max_score):
             return None
 
     try:
-        date = datetime.strptime(date, "%d-%m-%Y")
+        date = datetime.strptime(date, "%d-%m-%YT%H:%M:%S")
     except ValueError:
         print("Invalid date format. Use DD-MM-YYYY.")
         return None
