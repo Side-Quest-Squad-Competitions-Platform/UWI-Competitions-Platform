@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for, session
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import current_user, login_required
+import io
+import csv
 #from datetime import datetime
 
 from.index import index_views
@@ -217,3 +219,30 @@ def confirm_results(comp_name):
 def confirm_results(comp_name):
     pass
 """
+@comp_views.route('/upload_csv/<string:comp_name>', methods=['POST'])
+def upload_results_csv(comp_name):
+    file = request.files.get('csv_file')
+    if not file or not file.filename.endswith('.csv'):
+        flash("Please upload a valid CSV file.")
+        return redirect(request.referrer)
+
+    competition = get_competition_by_name(comp_name)
+    if not competition:
+        flash("Competition not found.")
+        return redirect(request.referrer)
+
+    moderator = Moderator.query.filter_by(id=current_user.id).first()
+    if not moderator:
+        flash("Unauthorized.")
+        return redirect(request.referrer)
+
+    stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+    csv_input = csv.DictReader(stream)
+
+    for row in csv_input:
+        students = [row['student1'], row['student2'], row['student3']]
+        add_team(moderator.username, comp_name, row['team_name'], students)
+        add_results(moderator.username, comp_name, row['team_name'], int(row['score']))
+
+    flash("CSV uploaded successfully.")
+    return redirect(url_for('comp_views.competition_details_by_name', name=comp_name))

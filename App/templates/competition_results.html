@@ -247,6 +247,26 @@
             <button type="submit" class="submit-btn">Upload Results</button>
         </form>
     </div>
+    <hr style="margin: 40px;">
+
+    <div class="form-section">
+        <h2>Upload Results via CSV</h2>
+        <form action="{{ url_for('comp_views.upload_results_csv', comp_name=competition.name) }}" method="POST" enctype="multipart/form-data">
+            <div class="input-field">
+                <label>CSV Format Guide:</label>
+                <pre style="background-color:#1e1e1e; color:white; border-radius:10px; overflow-x:auto;">
+                    <code>
+                    team_name,student1,student2,student3,score
+                    AlphaTeam,mark,michelle,eric,20
+                    </code>      
+                </pre>
+                <label for="csv_file">Select CSV File:</label>
+
+                <input type="file" name="csv_file" accept=".csv" required>
+            </div>
+            <button type="submit" class="submit-btn">Upload CSV</button>
+        </form>
+    </div>
 </div>
 
 <script>
