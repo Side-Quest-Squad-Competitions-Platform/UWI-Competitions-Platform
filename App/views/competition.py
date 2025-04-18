@@ -250,3 +250,64 @@ def upload_results_csv(comp_name):
 
     flash("CSV uploaded successfully.")
     return redirect(url_for('comp_views.competition_details_by_name', name=comp_name))
+
+
+
+
+
+
+
+# App/views/competition.py
+
+@comp_views.route('/editcompetition/<int:comp_id>', methods=['GET', 'POST'])
+@login_required
+def edit_competition(comp_id):
+    # 1) load the comp or 404
+    comp = Competition.query.get_or_404(comp_id)
+
+    # 2) load all moderators for the dropdown
+    all_mods = Moderator.query.order_by(Moderator.username).all()
+
+    if request.method == 'POST':
+        # 3a) update all the other fields...
+        raw_date = request.form['date']            # e.g. "2025-04-18"
+        raw_time = request.form['time']            # e.g. "13:45"
+        comp.name       = request.form['name']
+        comp.datetime   = datetime.strptime(f"{raw_date}T{raw_time}", "%Y-%m-%dT%H:%M")
+        comp.location   = request.form['location']
+        comp.level      = float(request.form['level'])
+        comp.max_score  = int(request.form['max_score'])
+
+        # 3b) now re‑assign the moderators
+        #      get the list of usernames sent by Select2
+        sel_usernames = request.form.getlist('moderators[]')
+        # clear out the old ones
+        comp.moderators.clear()
+        # append each one back onto comp.moderators
+        for uname in sel_usernames:
+            m = Moderator.query.filter_by(username=uname).first()
+            if m:
+                comp.moderators.append(m)
+
+        # 4) commit & redirect
+        db.session.commit()
+        flash("Competition updated!", "success")
+        return redirect(url_for('comp_views.get_competitions'))
+    
+    selected_usernames = [m.username for m in comp.moderators]
+
+    
+    
+    
+    # 5) GET: render the form, passing both the comp and the full moderator list
+    return render_template(
+        'edit_competition.html',
+        competition=comp,
+        moderators=all_mods,
+        selected_mods = selected_usernames,
+        user=current_user
+        
+    )
+
+
+   

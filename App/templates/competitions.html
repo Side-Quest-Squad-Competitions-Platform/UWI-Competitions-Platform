@@ -188,6 +188,27 @@
         animation: fadeInUp 0.6s forwards;
     }
 
+    .competition-card {
+  position: relative;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #6c63ff;
+    color: white;
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.edit-icon:hover {
+  background: #5248c3;
+}
+
 </style>
 
 <!-- Sidebar -->
@@ -221,6 +242,8 @@
 <div class="competitions-card">
     {% for competition in competitions[::-1] %}
     <div class="card" style="animation-delay: '{{ loop.index0 * 0.1|round(1) ~ 's' }}'">
+        <a href="{{ url_for('comp_views.edit_competition', comp_id=competition.id) }}" class="edit-icon" title="Edit Competition">✎</a>
+
         <a href="{{url_for('comp_views.competition_details', id=competition.id)}}">
             <h3>{{ competition.name }}</h3>
             <div>
