@@ -241,7 +241,7 @@
 
 <div class="competitions-card">
     {% for competition in competitions[::-1] %}
-    <div class="card" style="animation-delay: '{{ loop.index0 * 0.1|round(1) ~ 's' }}'">
+    <div class="card" style="animation-delay: {{ loop.index0 * 0.1 }}s;">
         {% if session.get('user_type') == 'moderator' %}
         <a 
         href="{{ url_for('comp_views.edit_competition', comp_id=competition.id) }}" 

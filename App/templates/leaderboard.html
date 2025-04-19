@@ -270,7 +270,7 @@
             </thead>
             <tbody>
                 {% for student in leaderboard[3:20] %}
-                <tr class="leaderboard-row" style="animation-delay:1.2s;">
+                <tr class="leaderboard-row" style="animation-delay: {{ loop.index0 * 0.1 + 0.7 }}s;">
                     <td>{{ student['placement'] }}</td>
                     <td>
                         <a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">
