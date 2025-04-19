@@ -1,5 +1,10 @@
 {% block content %}
 
+{% set is_mod = session.get('user_type') == 'moderator' %}
+{% set my_id = session.get('user_id')|int %}
+{% set mod_ids = competition.moderators %}
+
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
 
@@ -249,15 +254,14 @@
                     <td>{{ row['score'] }}</td>
 
                     <td class="edit-cell">
-                        {% if session.get('user_type') == 'moderator' %}
+                        {% if session['user_type'] == 'moderator' and moderator in competition.moderators %}
                         <a
                           href="{{ url_for('comp_views.delete_result',
                                            comp_id=competition.id,
                                            team_id=row['team_id']) }}"
                           class="delete-icon"
                           title="Delete this result">🗑️</a>
-                          {% endif %}
-
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

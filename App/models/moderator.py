@@ -25,4 +25,4 @@ class Moderator(User):
         }
 
     def __repr__(self):
-        return f'{self.username}'
+        return f'{self.id}'

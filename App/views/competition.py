@@ -100,7 +100,7 @@ def competition_details(id):
             moderator = None
     else:
         moderator = None
-    
+    print(competition.moderators)
     leaderboard = display_competition_results(competition.name)
     return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)#, team=team)
 
