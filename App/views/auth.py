@@ -38,6 +38,30 @@ def api_login():
 
     return "Invalid credentials", 401
 
+@auth_views.route('/api/signup', methods=['POST'])
+def api_signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user_type = request.form.get('user_type')
+
+        if not username or not password or not user_type:
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        if user_type == 'student':
+            user = create_student(username, password)
+            session['user_type'] = 'student'
+        elif user_type == 'moderator':
+            user = create_moderator(username, password)
+            session['user_type'] = 'moderator'
+        else:
+            return jsonify({'error': 'Invalid user type'}), 400
+
+        if user:
+            login_user(user)
+            return jsonify({'message': 'User created successfully', 'user': username, 'user_type': user_type}), 201
+        else:
+            return jsonify({'error': 'Signup failed'}), 500
 
 @auth_views.route('/login', methods=['GET', 'POST'])
 def login():
@@ -67,15 +91,12 @@ def logout():
     session['user_type'] = None
     return render_template('homepage.html', leaderboard=display_rankings(), user=current_user)
 
-@auth_views.route('/signup', methods=['POST'])
+@auth_views.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user_type = request.form.get('user_type')
-
-        if not username or not password or not user_type:
-            return jsonify({'error': 'Missing required fields'}), 400
+        username = request.form['username']
+        password = request.form['password']
+        user_type = request.form['user_type']  
 
         if user_type == 'student':
             user = create_student(username, password)
@@ -84,10 +105,12 @@ def signup():
             user = create_moderator(username, password)
             session['user_type'] = 'moderator'
         else:
-            return jsonify({'error': 'Invalid user type'}), 400
+            return render_template('signup.html', error="Invalid user type")
 
         if user:
             login_user(user)
-            return jsonify({'message': 'User created successfully', 'user': username, 'user_type': user_type}), 201
+            return redirect('/profile')
         else:
-            return jsonify({'error': 'Signup failed'}), 500
+            return render_template('signup.html', error="Signup failed")
+
+    return render_template('signup.html')
