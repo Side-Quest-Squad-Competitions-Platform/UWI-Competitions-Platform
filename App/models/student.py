@@ -45,7 +45,7 @@ class Student(User):
             "ID": self.id,
             "Username": self.username,
             "Rating Score": self.rating_score,
-            "Number of Competitions" : comp_count,
+            "Number of Competitions" : self.comp_count,
             "Rank" : self.curr_rank
         }
 

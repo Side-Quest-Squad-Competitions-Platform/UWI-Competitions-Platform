@@ -87,7 +87,14 @@ def display_competition_results(name):
                 curr_high = comp_team.points_earned
 
             team = Team.query.filter_by(id=comp_team.team_id).first()
-            leaderboard.append({"placement": curr_rank, "team": team.name, "members" : [student.username for student in team.students], "score":comp_team.points_earned})
+            leaderboard.append({"placement": curr_rank, "team": team.name, "members" : [student.username for student in team.students], "score":comp_team.points_earned, "team_id":team.id})
             count += 1
         
         return leaderboard
+    
+def get_competition_result(comp_id: int, team_id: int):
+    comp_team = CompetitionTeam.query.filter_by(comp_id=comp_id, team_id=team_id).first()
+    if comp_team:
+        return comp_team
+    return None
+    
