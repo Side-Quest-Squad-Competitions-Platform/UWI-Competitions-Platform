@@ -187,6 +187,16 @@
         transform: translateY(20px);
         transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     }
+
+
+    .delete-icon {
+        color: #e74c3c;
+        font-size: 1.2em;
+    }
+    .delete-icon:hover {
+        color: #c0392b;
+    }
+
 </style>
 
 <!-- SIDEBAR -->
@@ -220,6 +230,10 @@
                     <th>Team</th>
                     <th>Members</th>
                     <th>Score</th>
+                    {% if session.get('user_type') == 'moderator' %}
+                    <th>Delete</th> 
+                    {% endif %}
+
                 </tr>
             </thead>
             <tbody>
@@ -233,6 +247,18 @@
                         {% endfor %}
                     </td>
                     <td>{{ row['score'] }}</td>
+
+                    <td class="edit-cell">
+                        {% if session.get('user_type') == 'moderator' %}
+                        <a
+                          href="{{ url_for('comp_views.delete_result',
+                                           comp_id=competition.id,
+                                           team_id=row['team_id']) }}"
+                          class="delete-icon"
+                          title="Delete this result">🗑️</a>
+                          {% endif %}
+
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

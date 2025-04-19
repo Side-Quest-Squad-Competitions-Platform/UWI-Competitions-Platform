@@ -257,39 +257,38 @@ def upload_results_csv(comp_name):
 
 
 
-# App/views/competition.py
+
 
 @comp_views.route('/editcompetition/<int:comp_id>', methods=['GET', 'POST'])
 @login_required
 def edit_competition(comp_id):
-    # 1) load the comp or 404
     comp = Competition.query.get_or_404(comp_id)
+    
+    moderator = Moderator.query.filter_by(id=current_user.id).first()
+    if moderator not in comp.moderators:
+        flash("Unauthorized.")
+        return redirect(request.referrer)
 
-    # 2) load all moderators for the dropdown
     all_mods = Moderator.query.order_by(Moderator.username).all()
 
     if request.method == 'POST':
-        # 3a) update all the other fields...
-        raw_date = request.form['date']            # e.g. "2025-04-18"
-        raw_time = request.form['time']            # e.g. "13:45"
+        raw_date = request.form['date']            
+        raw_time = request.form['time']            
         comp.name       = request.form['name']
         comp.datetime   = datetime.strptime(f"{raw_date}T{raw_time}", "%Y-%m-%dT%H:%M")
         comp.location   = request.form['location']
         comp.level      = float(request.form['level'])
         comp.max_score  = int(request.form['max_score'])
 
-        # 3b) now re‑assign the moderators
-        #      get the list of usernames sent by Select2
+        
+        
         sel_usernames = request.form.getlist('moderators[]')
-        # clear out the old ones
         comp.moderators.clear()
-        # append each one back onto comp.moderators
         for uname in sel_usernames:
             m = Moderator.query.filter_by(username=uname).first()
             if m:
                 comp.moderators.append(m)
 
-        # 4) commit & redirect
         db.session.commit()
         flash("Competition updated!", "success")
         return redirect(url_for('comp_views.get_competitions'))
@@ -297,9 +296,6 @@ def edit_competition(comp_id):
     selected_usernames = [m.username for m in comp.moderators]
 
     
-    
-    
-    # 5) GET: render the form, passing both the comp and the full moderator list
     return render_template(
         'edit_competition.html',
         competition=comp,
@@ -308,6 +304,34 @@ def edit_competition(comp_id):
         user=current_user
         
     )
+
+@comp_views.route('/competitions/<int:comp_id>/delete/<int:team_id>', methods=['GET','POST'])
+@login_required
+def delete_result(comp_id,team_id):
+    comp = Competition.query.get_or_404(comp_id)
+    if not comp:
+        ConnectionAbortedError(404)
+
+    moderator = Moderator.query.filter_by(id=current_user.id).first()
+    if moderator not in comp.moderators:
+        flash("Unauthorized.")
+        return redirect(request.referrer)
+    
+    comp_team = get_competition_result(comp_id, team_id)
+    if not comp_team:
+        ConnectionAbortedError(404)
+    team = get_team(team_id)
+    if not team:
+        ConnectionAbortedError(404)
+
+    if session['user_type'] == 'moderator':
+        moderator = Moderator.query.filter_by(id=current_user.id).first()
+    else:
+        moderator = None    
+
+    db.session.delete(comp_team) 
+    db.session.commit()   
+    return redirect(url_for('comp_views.competition_details', id=comp_id))          
 
 
    
