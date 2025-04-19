@@ -73,7 +73,7 @@ class UnitTests(unittest.TestCase):
     
     def test_duplicate_moderator_assignment(self):
       mod1 = create_moderator("debra", "debrapass")
-      comp = create_competition(mod1.username, "Code Clash", "10-06-2025", "St. Augustine", 1, 20)
+      comp = create_competition(mod1.username, "Code Clash", "26-01-2024T11:00", "St. Augustine", 1, 20)
       result = add_mod(mod1.username, comp.name, "debra")
       self.assertIsNone(result)
 
@@ -99,7 +99,7 @@ class UnitTests(unittest.TestCase):
 
     def test_competition_get_json(self):
       competition = Competition("RunTime", datetime.strptime("09-02-2024", "%d-%m-%Y"), "St. Augustine", 1, 25)
-      self.assertDictEqual(competition.get_json(), {"id": None, "name": "RunTime", "date": "09-02-2024", "location": "St. Augustine", "level": 1, "max_score": 25, "moderators": [], "teams": []})
+      self.assertDictEqual(competition.get_json(), {"id": None, "name": "RunTime", "date": "09-02-2024", "time": "12:00 AM", "location": "St. Augustine", "level": 1, "max_score": 25, "moderators": [], "teams": []})
     
     def test_competition_add_team(self):
       competition = Competition("RunTime", datetime.now(), "Barbados", 1, 100)
@@ -180,7 +180,7 @@ class UnitTests(unittest.TestCase):
       result = cmd.execute(
           mod_names="debra",
           comp_name="Code Wars",
-          date="01-01-2025",
+          date="26-01-2024T11:00",
           location="Online",
           level=1,
           max_score=10
@@ -233,18 +233,18 @@ class IntegrationTests(unittest.TestCase):
     #Feature 1 Integration Tests
     def test1_create_competition(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       assert comp.name == "RunTime" and comp.date.strftime("%d-%m-%Y") == "29-03-2024" and comp.location == "St. Augustine" and comp.level == 2 and comp.max_score == 25
 
     def test2_create_competition(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      self.assertDictEqual(comp.get_json(), {"id": 1, "name": "RunTime", "date": "29-03-2024", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": []})
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
+      self.assertDictEqual(comp.get_json(), {"id": 1, "name": "RunTime", "date": "29-03-2024", "time": "11:00 AM", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": []})
       
     #Feature 2 Integration Tests
     def test1_add_results(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -255,7 +255,7 @@ class IntegrationTests(unittest.TestCase):
     
     def test2_add_results(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -271,7 +271,7 @@ class IntegrationTests(unittest.TestCase):
     def test3_add_results(self):
       mod1 = create_moderator("debra", "debrapass")
       mod2 = create_moderator("robert", "robertpass")
-      comp = create_competition(mod1.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod1.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -282,7 +282,7 @@ class IntegrationTests(unittest.TestCase):
     #Feature 3 Integration Tests
     def test_display_student_info(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -303,7 +303,7 @@ class IntegrationTests(unittest.TestCase):
     #Feature 4 Integration Tests
     def test_display_competition(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -324,12 +324,12 @@ class IntegrationTests(unittest.TestCase):
       comp_team = add_results(mod.username, comp.name, "Beyond Infinity", 10)
       update_ratings(mod.username, comp.name)
       UpdateLeaderboardCommand(moderator_id=None).execute()
-      self.assertDictEqual(comp.get_json(), {'id': 1, 'name': 'RunTime', 'date': '29-03-2024', 'location': 'St. Augustine', 'level': 2, 'max_score': 25, 'moderators': ['debra'], 'teams': ['Runtime Terrors', 'Scrum Lords', 'Beyond Infinity']})
+      self.assertDictEqual(comp.get_json(), {'id': 1, 'name': 'RunTime', 'date': '29-03-2024', "time": "11:00 AM", 'location': 'St. Augustine', 'level': 2, 'max_score': 25, 'moderators': ['debra'], 'teams': ['Runtime Terrors', 'Scrum Lords', 'Beyond Infinity']})
 
     #Feature 5 Integration Tests
     def test_display_rankings(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "26-01-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -356,7 +356,7 @@ class IntegrationTests(unittest.TestCase):
     #Feature 6 Integration Tests
     def test1_display_notification(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod.username, "RunTime", "26-01-2024T11:00", "St. Augustine", 2, 25)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -377,8 +377,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test2_display_notification(self):
       mod = create_moderator("debra", "debrapass")
-      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 30)
+      comp1 = create_competition(mod.username, "RunTime", "26-01-2024T11:00", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "28-01-2024T11:00", "Macoya", 1, 30)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -410,8 +410,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test3_display_notification(self):
       mod = create_moderator("debra", "debrapass")
-      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024T11:00", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -443,8 +443,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test4_display_notification(self):
       mod = create_moderator("debra", "debrapass")
-      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024T11:00", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -478,20 +478,20 @@ class IntegrationTests(unittest.TestCase):
     def test1_add_mod(self):
       mod1 = create_moderator("debra", "debrapass")
       mod2 = create_moderator("robert", "robertpass")
-      comp = create_competition(mod1.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod1.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       assert add_mod(mod1.username, comp.name, mod2.username) != None
        
     def test2_add_mod(self):
       mod1 = create_moderator("debra", "debrapass")
       mod2 = create_moderator("robert", "robertpass")
       mod3 = create_moderator("raymond", "raymondpass")
-      comp = create_competition(mod1.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
+      comp = create_competition(mod1.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
       assert add_mod(mod2.username, comp.name, mod3.username) == None
     
     def test_student_list(self):
       mod = create_moderator("debra", "debrapass")
-      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024T11:00", "Macoya", 1, 20)
 
       # Create students
       student1 = create_student("james", "jamespass")
@@ -526,8 +526,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test_comp_list(self):
       mod = create_moderator("debra", "debrapass")
-      comp1 = create_competition(mod.username, "RunTime", "29-03-2024", "St. Augustine", 2, 25)
-      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024", "Macoya", 1, 20)
+      comp1 = create_competition(mod.username, "RunTime", "29-03-2024T11:00", "St. Augustine", 2, 25)
+      comp2 = create_competition(mod.username, "Hacker Cup", "23-02-2024T11:00", "Macoya", 1, 20)
       student1 = create_student("james", "jamespass")
       student2 = create_student("steven", "stevenpass")
       student3 = create_student("emily", "emilypass")
@@ -550,12 +550,12 @@ class IntegrationTests(unittest.TestCase):
       comp_team4 = add_results(mod.username, comp2.name, "Scrum Lords", 10)
       update_ratings(mod.username, comp2.name)
       UpdateLeaderboardCommand(moderator_id=None).execute()
-      self.assertListEqual(get_all_competitions_json(), [{"id": 1, "name": "RunTime", "date": "29-03-2024", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}, {"id": 2, "name": "Hacker Cup", "date": "23-02-2024", "location": "Macoya", "level": 1, "max_score": 20, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}])
+      self.assertListEqual(get_all_competitions_json(), [{"id": 1, "name": "RunTime", "date": "29-03-2024", "time": "11:00 AM", "location": "St. Augustine", "level": 2, "max_score": 25, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}, {"id": 2, "name": "Hacker Cup", "date": "23-02-2024", "time": "11:00 AM", "location": "Macoya", "level": 1, "max_score": 20, "moderators": ["debra"], "teams": ["Runtime Terrors", "Scrum Lords"]}])
     
     def test_multiple_moderator_assignment(self):
       mod1 = create_moderator("debra", "debrapass")
       mod2 = create_moderator("robert", "robertpass")
-      comp = create_competition(mod1.username, "Debug Duel", "20-05-2025", "St. Augustine", 2, 40)
+      comp = create_competition(mod1.username, "Debug Duel", "20-05-2025T11:00", "St. Augustine", 2, 40)
       self.assertIsNotNone(comp)
       result = add_mod(mod1.username, comp.name, mod2.username)
       self.assertIsNotNone(result)
@@ -569,7 +569,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_rank_history(self):
       mod = create_moderator("debra", "debrapass")
-      comp = create_competition(mod.username, "Rank Wars", "05-05-2025", "St. Augustine", 2, 50)
+      comp = create_competition(mod.username, "Rank Wars", "05-05-2025T11:00", "St. Augustine", 2, 50)
       students = [create_student("james", "jamespass"), create_student("steven", "stevenpass"), create_student("emily", "emilypass")]
       add_team(mod.username, comp.name, "Runtime Terrors", [s.username for s in students])
       add_results(mod.username, comp.name, "Runtime Terrors", 20)
@@ -585,7 +585,7 @@ class IntegrationTests(unittest.TestCase):
       comp = create_cmd.execute(
           mod_names="debra",
           comp_name="Algo Clash",
-          date="15-05-2025",
+          date="15-05-2025T11:00",
           location="Online",
           level=1,
           max_score=30
