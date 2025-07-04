@@ -26,37 +26,56 @@ class Competition(db.Model):
     def add_mod(self, mod):
         for m in self.moderators:
             if m.id == mod.id:
-                print(f'{mod.username} already added to {self.name}!')
-                return None
+                return {
+                "status": "error",
+                "message": f"{mod.username} already added to {self.name}."
+            }
+
         
-        comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
+        
         try:
+            comp_mod = CompetitionModerator(comp_id=self.id, mod_id=mod.id)
             self.moderators.append(mod)
             db.session.commit()
-            print(f'{mod.username} was added to {self.name}!')
-            return comp_mod
+            return {
+            "status": "success",
+            "message": f"{mod.username} was added to {self.name}.",
+            "moderator": mod.username
+        }
+           
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
-            return None
-
+            return {
+            "status": "error",
+            "message": f"Failed to add moderator: {str(e)}"
+        }
+            
     def add_team(self, team):
         for t in self.teams:
             if t.id == team.id:
-                print(f'Team already registered for {self.name}!')
-                return None
-        
-        comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
+                return {
+                "status": "error",
+                "message": f"{team.name} already registered for {self.name}."
+            }
+               
         try:
+            comp_team = CompetitionTeam(comp_id=self.id, team_id=team.id)
             self.teams.append(team)
             team.competitions.append(self)
             db.session.commit()
-            print(f'{team.name} was added to {self.name}!')
-            return comp_team
+            return {
+            "status": "success",
+            "message": f"{team.name} was added to {self.name}.",
+            "team": team.name
+            }
+        
         except Exception as e:
             db.session.rollback()
-            print("Something went wrong!")
-            return None
+            return {
+            "status": "error",
+            "message": f"Failed to add team: {str(e)}"
+        }
+        
 
     def get_json(self):
         return {

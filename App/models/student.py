@@ -1,8 +1,6 @@
 from App.database import db
 from App.models import User
 
-# Refactoring Models Test Commit
-
 class Student(User):
     __tablename__ = 'student'
 
