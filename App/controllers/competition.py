@@ -1,6 +1,7 @@
 from App.database import db
-from App.models import Competition, Moderator, CompetitionTeam, Team, Student#, Student, Admin, competition_student
+from App.models import Competition, Moderator, Student, Result
 from datetime import datetime
+from collections import defaultdict
 
 def create_competition(mod_names, comp_name, date, location, level, max_score):
     competition = get_competition_by_name(comp_name)
@@ -69,29 +70,42 @@ def display_competition_results(name):
     if not comp:
         print(f'{name} was not found!')
         return None
-    elif len(comp.teams) == 0:
-        print(f'No teams found for {name}!')
+    elif len(comp.results) == 0:
+        print(f'No results found for {name}!')
         return []
-    else:
-        comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
-        comp_teams.sort(key=lambda x: x.points_earned, reverse=True)
 
-        leaderboard = []
-        count = 1
-        curr_high = comp_teams[0].points_earned
-        curr_rank = 1
-        
-        for comp_team in comp_teams:
-            if curr_high != comp_team.points_earned:
-                curr_rank = count
-                curr_high = comp_team.points_earned
+    team_results = defaultdict(list)
+    for result in comp.results:
+        team_results[result.team_name].append(result)
 
-            team = Team.query.filter_by(id=comp_team.team_id).first()
-            leaderboard.append({"placement": curr_rank, "team": team.name, "members" : [student.username for student in team.students], "score":comp_team.points_earned, "team_id":team.id})
-            count += 1
-        
-        return leaderboard
-    
+    team_data = []
+    for team_name, results in team_results.items():
+        team_score = results[0].score  # assume same score for team members
+        members = [f"{res.full_name}" for res in results]
+        team_data.append({"team": team_name, "score": team_score, "members": members})
+
+    team_data.sort(key=lambda x: x["score"], reverse=True)
+
+    leaderboard = []
+    curr_high = None
+    curr_rank = 1
+    count = 1
+
+    for entry in team_data:
+        if curr_high != entry["score"]:
+            curr_rank = count
+            curr_high = entry["score"]
+
+        leaderboard.append({
+            "placement": curr_rank,
+            "team": entry["team"],
+            "members": entry["members"],
+            "score": entry["score"]
+        })
+        count += 1
+
+    return leaderboard
+
 def get_competition_result(comp_id: int, team_id: int):
     comp_team = CompetitionTeam.query.filter_by(comp_id=comp_id, team_id=team_id).first()
     if comp_team:

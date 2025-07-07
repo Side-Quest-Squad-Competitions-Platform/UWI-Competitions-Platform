@@ -1,13 +1,13 @@
 from App.database import db
 from App.models import Student, Competition, Notification, CompetitionTeam
 
-def create_student(username, password):
+def create_student(username, password, fName, lName, email):
     student = get_student_by_username(username)
     if student:
         print(f'{username} already exists!')
         return None
 
-    newStudent = Student(username=username, password=password)
+    newStudent = Student(username=username, password=password, fName=fName, lName=lName, email=email)
     try:
         db.session.add(newStudent)
         db.session.commit()
@@ -15,7 +15,7 @@ def create_student(username, password):
         return newStudent
     except Exception as e:
         db.session.rollback()
-        print(f'Something went wrong creating {username}')
+        print(f'Something went wrong creating {username}: {e}')
         return None
 
 def get_student_by_username(username):
@@ -100,9 +100,9 @@ def display_rankings():
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
             count += 1
 
-    print("Rank\tStudent\tRating Score")
+    # print("Rank\tStudent\tRating Score")
 
-    for position in leaderboard:
-        print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
+    # for position in leaderboard:
+    #     print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
     
     return leaderboard

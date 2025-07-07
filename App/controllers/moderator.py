@@ -1,7 +1,8 @@
 from App.database import db
-from App.models import Moderator, Competition, Team, CompetitionTeam
+from App.models import Moderator, Competition, CompetitionTeam, Result, Student
 from App.models.commands.create_competition_command import CreateCompetitionCommand
 from App.models.commands.update_leaderboard_command import UpdateLeaderboardCommand
+from collections import defaultdict
 
 def create_moderator(username, password):
     mod = get_moderator_by_username(username)
@@ -118,77 +119,68 @@ def add_results(mod_names, comp_name, team_name, score):
     return None
 
 
-
 def update_ratings(mod_name, comp_name):
     mod = Moderator.query.filter_by(username=mod_name).first()
     comp = Competition.query.filter_by(name=comp_name).first()
 
     if not mod:
-        print(f'{mod_name} was not found!')
+        print(f'{mod_name} not found.')
         return None
-    elif not comp:
-        print(f'{comp_name} was not found!')
+    if not comp:
+        print(f'{comp_name} not found.')
         return None
-    elif comp.confirm:
-        print(f'Results for {comp_name} have already been finalized!')
+    if comp.confirm:
+        print(f'{comp_name} has already been finalized.')
         return None
-    elif mod not in comp.moderators:
-        print(f'{mod_name} is not authorized to confirm results for {comp_name}!')
-        return None
-    elif len(comp.teams) == 0:
-        print(f'No teams found. Results cannot be confirmed!')
+    if mod not in comp.moderators:
+        print(f'{mod_name} is not authorized to finalize {comp_name}.')
         return None
 
-    comp_teams = CompetitionTeam.query.filter_by(comp_id=comp.id).all()
+    # Get results for the competition
+    results = Result.query.filter_by(comp_id=comp.id).all()
+    if not results:
+        print(f'No results found for {comp_name}.')
+        return None
 
-    # Get average rating of each team
-    team_ratings = {}
-    for comp_team in comp_teams:
-        team = Team.query.get(comp_team.team_id)
-        if team and team.students:
-            avg_rating = sum([s.rating_score for s in team.students]) / len(team.students)
-            team_ratings[team.id] = avg_rating
+    # Determine winning score
+    winner_score = max(res.score for res in results)
+    if winner_score == 0:
+        print("All scores are zero — cannot compute ratios.")
+        return None
 
-    # Sort teams by score (descending)
-    sorted_teams = sorted(comp_teams, key=lambda ct: ct.points_earned, reverse=True)
+    # Weighting (as per spec) — stored in comp.level
+    comp_weight = comp.level if comp.level else 1
 
-    # Perform pairwise Elo updates
-    for i, comp_team in enumerate(sorted_teams):
-        team = Team.query.get(comp_team.team_id)
-        team_avg = team_ratings.get(team.id, 0)
+    # Update matched students
+    updated_emails = set()
+    for res in results:
+        student = Student.query.filter_by(email=res.email).first()
+        if not student:
+            continue  # Skip unmatched participants
 
-        for j, other_team_ct in enumerate(sorted_teams):
-            if i == j:
-                continue
+        # Compute points gained
+        ratio = res.score / winner_score
+        points = ratio * comp_weight
 
-            other_team = Team.query.get(other_team_ct.team_id)
-            opp_avg = team_ratings.get(other_team.id, 0)
-
-            # actual score: 1 if this team ranked higher, 0 if lower
-            actual_score = 1 if i < j else 0
-            expected_score = 1 / (1 + 10 ** ((opp_avg - team_avg) / 400))
-
-            for student in team.students:
-                k = get_dynamic_k(student)
-                delta = k * (actual_score - expected_score)
-                student.rating_score = max(0, student.rating_score + delta)
-
-    # Finalize: update comp_count and commit
-    for comp_team in comp_teams:
-        team = Team.query.get(comp_team.team_id)
-        for student in team.students:
+        student.rating_score += points
+        if student.email not in updated_emails:
             student.comp_count += 1
-            db.session.add(student)
+            updated_emails.add(student.email)
 
+        res.student_id = student.id  # link result to student
+        db.session.add(student)
+        db.session.add(res)
+
+    # Finalize the competition
     try:
         comp.confirm = True
         db.session.add(comp)
         db.session.commit()
-        print("Results finalized with Elo rating updates.")
+        print(f"Competition finalized and student points updated. - {comp.name}")
         return True
     except Exception as e:
         db.session.rollback()
-        print("Failed to finalize results:", e)
+        print(f"Error finalizing results: {e}")
         return None
 
 # Run create competition via command

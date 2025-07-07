@@ -17,6 +17,7 @@ def get_competitions():
     competitions = get_all_competitions_json()
     return render_template('competitions.html', competitions=get_all_competitions(), user=current_user)
     #return (jsonify(competitions),200) 
+
 """
 ##add new competition to the db
 @comp_views.route('/competitions', methods=['POST'])
@@ -27,6 +28,7 @@ def add_new_comp():
         return (jsonify({'message': "Competition created!"}), 201)
     return (jsonify({'error': "Error creating competition"}),500)
 """
+
 #create new comp
 @comp_views.route('/createcompetition', methods=['POST'])
 @login_required
@@ -305,9 +307,9 @@ def edit_competition(comp_id):
         
     )
 
-@comp_views.route('/competitions/<int:comp_id>/delete/<int:team_id>', methods=['GET','POST'])
+@comp_views.route('/competitions/<int:comp_id>/delete/<string:team_name>', methods=['GET','POST'])
 @login_required
-def delete_result(comp_id,team_id):
+def delete_result(comp_id,team_name):
     comp = Competition.query.get_or_404(comp_id)
     if not comp:
         ConnectionAbortedError(404)
