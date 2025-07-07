@@ -24,29 +24,20 @@ def initialize():
     #creates students
     with open("students.csv") as student_file:
         reader = csv.DictReader(student_file)
-
         for student in reader:
-            stud = create_student(student['username'], student['password'])
-            #db.session.add(stud)
-        #db.session.commit()
-    
+            stud = create_student(student['username'], student['password'], student['fName'], student['lName'], student['email'])
     student_file.close()
 
     #creates moderators
     with open("moderators.csv") as moderator_file:
         reader = csv.DictReader(moderator_file)
-
         for moderator in reader:
             mod = create_moderator(moderator['username'], moderator['password'])
-            #db.session.add(mod)
-        #db.session.commit()
-    
     moderator_file.close()
 
     #creates competitions
     with open("competitions.csv") as competition_file:
         reader = csv.DictReader(competition_file)
-
         for competition in reader:
             command = CreateCompetitionCommand(moderator_id=None)
             comp = command.execute(
@@ -55,31 +46,23 @@ def initialize():
                 competition['date'],
                 competition['location'],
                 competition['level'],
-                competition['max_score']
-            )
+                competition['max_score'])
     competition_file.close()
     
     with open("results.csv") as results_file:
         reader = csv.DictReader(results_file)
-
         for result in reader:
-            students = [result['student1'], result['student2'], result['student3']]
-            team = add_team(result['mod_names'], result['comp_name'], result['team_name'], students)
-            add_results(result['mod_names'], result['comp_name'], result['team_name'], int(result['score']))
-            #db.session.add(comp)
-        #db.session.commit()
-    
+            res = add_result(result['comp_id'], result['full_name'], result['email'], result['team_name'], result['score'])
     results_file.close()
-
+    
     with open("competitions.csv") as competitions_file:
         reader = csv.DictReader(competitions_file)
 
         for competition in reader:
-            if competition['comp_name'] != 'TopCoder':
+            if competition['comp_name'] != 'TopCode':
                 mod_name = competition['mod_names'].split(',')[0].strip() 
                 update_ratings(mod_name, competition['comp_name'])
                 UpdateLeaderboardCommand(moderator_id=None).execute()
-    
     competitions_file.close()
 
     """
