@@ -1,10 +1,9 @@
 from App.controllers.competition import create_competition, display_competition_results, get_all_competitions_json, get_competition, get_competition_by_name
 from App.controllers.moderator import add_results
 from App.controllers.student import get_student_by_username
-from App.controllers.team import add_team
 from flask import Blueprint, jsonify, request, session
 from flask_login import login_required, current_user
-from App.controllers import display_rankings, display_student_info
+from App.controllers import display_rankings
 from App.models.rank_history import RankHistory
 
 api_views = Blueprint('api_views', __name__, url_prefix='/api')

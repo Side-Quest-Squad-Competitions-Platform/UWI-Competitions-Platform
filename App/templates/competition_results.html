@@ -204,60 +204,17 @@
 
 <!-- Main Content -->
 <div class="content">
-    <div class="form-section">
-        <h2>Competition Results</h2>
-        <form name="addResultsForm" method="POST" action="{{ url_for('comp_views.add_competition_results', comp_name=competition.name) }}">
-            <div class="input-field">
-                <label for="team_name">Team Name:</label>
-                <input type="text" name="team_name" placeholder="Enter Team Name" required>
-            </div>
-            <div class="input-field">
-                <label for="student1">Student 1:</label>
-                <select name="student1" required>
-                    <option value="" disabled selected>Select Student 1</option>
-                    {% for student in students %}
-                        <option value="{{ student.username }}">{{ student.username }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="input-field">
-                <label for="student2">Student 2:</label>
-                <select name="student2" required>
-                    <option value="" disabled selected>Select Student 2</option>
-                    {% for student in students %}
-                        <option value="{{ student.username }}">{{ student.username }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="input-field">
-                <label for="student3">Student 3:</label>
-                <select name="student3" required>
-                    <option value="" disabled selected>Select Student 3</option>
-                    {% for student in students %}
-                        <option value="{{ student.username }}">{{ student.username }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="input-field">
-                <label for="score">Score (Max: {{ competition.max_score }}):</label>
-                <input type="number" id="score-input" name="score" max="{{ competition.max_score }}" min = "0" placeholder="Enter Score" required>
-            </div>
-            <button type="submit" class="submit-btn">Upload Results</button>
-        </form>
-    </div>
     <hr style="margin: 40px;">
 
     <div class="form-section">
         <h2>Upload Results via CSV</h2>
-        <form action="{{ url_for('comp_views.upload_results_csv', comp_name=competition.name) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('comp_views.add_results_csv', comp_id=competition.id) }}" method="POST" enctype="multipart/form-data">
             <div class="input-field">
                 <label>CSV Format Guide:</label>
                 <pre style="background-color:#1e1e1e; color:white; border-radius:10px; overflow-x:auto;">
                     <code>
-                    team_name,student1,student2,student3,score
-                    AlphaTeam,mark,michelle,eric,20
+                    comp_id,full_name,email,team_name,score
+                    1,Mark Wilson,michelle,mark.wilson@gmail.com,Scrum Lords,20
                     </code>      
                 </pre>
                 <label for="csv_file">Select CSV File:</label>

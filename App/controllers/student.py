@@ -1,13 +1,15 @@
 from App.database import db
-from App.models import Student, Competition, Notification, CompetitionTeam
+from App.models import Student, Competition, Notification
+from App.controllers.result import get_results_by_student_id
+from App.controllers.competition import get_competition
 
-def create_student(username, password):
+def create_student(username, password, fName, lName, email):
     student = get_student_by_username(username)
     if student:
         print(f'{username} already exists!')
         return None
 
-    newStudent = Student(username=username, password=password)
+    newStudent = Student(username=username, password=password, fName=fName, lName=lName, email=email)
     try:
         db.session.add(newStudent)
         db.session.commit()
@@ -15,11 +17,17 @@ def create_student(username, password):
         return newStudent
     except Exception as e:
         db.session.rollback()
-        print(f'Something went wrong creating {username}')
+        print(f'Something went wrong creating {username}: {e}')
         return None
 
 def get_student_by_username(username):
     return Student.query.filter_by(username=username).first()
+
+def get_student_by_full_name(full_name):
+    parts = full_name.strip().split(" ", 1)
+    fName = parts[0]
+    lName = parts[1] if len(parts) > 1 else ""
+    return Student.query.filter_by(fName=fName, lName=lName).first()
 
 def get_student(id):
     return Student.query.get(id)
@@ -58,13 +66,11 @@ def display_student_info(username):
         return None
     else:
         competitions = []
-        
-        for team in student.teams:
-            team_comps = CompetitionTeam.query.filter_by(team_id=team.id).all()
-            for comp_team in team_comps:
-                comp = Competition.query.filter_by(id=comp_team.comp_id).first()
-                competitions.append(comp.name)
 
+        results = get_results_by_student_id(student.id)
+        for result in results:
+            competitions.append(get_competition(result.comp_id))
+        
         profile_info = {
             "profile" : student.get_json(),
             "competitions" : competitions
@@ -100,9 +106,9 @@ def display_rankings():
             leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
             count += 1
 
-    print("Rank\tStudent\tRating Score")
+    # print("Rank\tStudent\tRating Score")
 
-    for position in leaderboard:
-        print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
+    # for position in leaderboard:
+    #     print(f'{position["placement"]}\t{position["student"]}\t{position["rating score"]}')
     
     return leaderboard
