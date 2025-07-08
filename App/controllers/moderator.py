@@ -104,7 +104,7 @@ def add_results(mod_names, comp_name, team_name, score):
         comp_team = CompetitionTeam.query.filter_by(comp_id=comp.id, team_id=team.id).first()
         if comp_team:
             comp_team.points_earned = score
-            comp_team.points = (score / comp.max_score) * 20 * comp.level
+            comp_team.points = (score / comp.max_score) * 20 * comp.weight
             try:
                 db.session.add(comp_team)
                 db.session.commit()
@@ -148,8 +148,7 @@ def update_ratings(mod_name, comp_name):
         print("All scores are zero — cannot compute ratios.")
         return None
 
-    # Weighting (as per spec) — stored in comp.level
-    comp_weight = comp.level if comp.level else 1
+    comp_weight = comp.weight if comp.weight else 1
 
     # Update matched students
     updated_emails = set()
@@ -184,9 +183,9 @@ def update_ratings(mod_name, comp_name):
         return None
 
 # Run create competition via command
-def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, location, level, max_score):
+def create_competition_by_moderator(moderator_id, mod_name, comp_name, date, location, weight, max_score):
     cmd = CreateCompetitionCommand(moderator_id)
-    competition = cmd.execute(mod_name, comp_name, date, location, level, max_score)
+    competition = cmd.execute(mod_name, comp_name, date, location, weight, max_score)
     if competition:
         return f"Competition '{competition.name}' created successfully"
     return "Failed to create competition"

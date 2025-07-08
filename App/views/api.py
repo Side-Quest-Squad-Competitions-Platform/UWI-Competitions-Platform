@@ -46,7 +46,7 @@ def get_competitions():
 @api_views.route('/competitions', methods=['POST'])
 def create_competition_api():
     data = request.json
-    response = create_competition('robert', data['name'], data['date'], data['location'], data['level'], data['max_score'])
+    response = create_competition('robert', data['name'], data['date'], data['location'], data['weight'], data['max_score'])
     if response:
         return jsonify({'message': "Competition created!"}), 201
     return jsonify({'error': "Error creating competition"}), 500

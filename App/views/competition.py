@@ -49,7 +49,7 @@ def create_comp():
         comp_name=data['name'],
         date=formatted,
         location=data['location'],
-        level=data['level'],
+        weight=data['weight'],
         max_score=int(data['max_score'])
     )
 
@@ -202,7 +202,7 @@ def edit_competition(comp_id):
         comp.name       = request.form['name']
         comp.datetime   = datetime.strptime(f"{raw_date}T{raw_time}", "%Y-%m-%dT%H:%M")
         comp.location   = request.form['location']
-        comp.level      = float(request.form['level'])
+        comp.weight      = float(request.form['weight'])
         comp.max_score  = int(request.form['max_score'])
 
         

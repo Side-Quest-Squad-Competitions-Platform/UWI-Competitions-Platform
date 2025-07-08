@@ -45,7 +45,7 @@ def initialize():
                 competition['comp_name'],
                 competition['date'],
                 competition['location'],
-                competition['level'],
+                competition['weight'],
                 competition['max_score'])
     competition_file.close()
     
@@ -234,10 +234,10 @@ comp_cli = AppGroup("comp", help = "Competition commands")
 @click.argument("name", default = "comp1")
 @click.argument("date", default = "09-02-2024")
 @click.argument("location", default = "CSL")
-@click.argument("level", default = 1)
+@click.argument("weight", default = 1)
 @click.argument("max_score", default = 25)
-def create_competition_command(mod_name, name, date, location, level, max_score):
-    comp = create_competition(mod_name, name, date, location, level, max_score)
+def create_competition_command(mod_name, name, date, location, weight, max_score):
+    comp = create_competition(mod_name, name, date, location, weight, max_score)
 
 @comp_cli.command("details", help = "Displays competition details")
 @click.argument("name", default = "comp1")
