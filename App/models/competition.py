@@ -9,18 +9,18 @@ class Competition(db.Model):
     name =  db.Column(db.String, nullable=False, unique=True)
     date = db.Column(db.DateTime, default= datetime.utcnow)
     location = db.Column(db.String(120), nullable=False)
-    level = db.Column(db.Float, default=1)
+    weight = db.Column(db.Float, default=1)
     max_score = db.Column(db.Integer, default=25)
     confirm = db.Column(db.Boolean, default=False)
     moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
     
     results = db.relationship('Result', overlaps='competitions', lazy=True)
 
-    def __init__(self, name, date, location, level, max_score):
+    def __init__(self, name, date, location, weight, max_score):
         self.name = name
         self.date = date
         self.location = location
-        self.level = level
+        self.weight = weight
         self.max_score = max_score
     
     def add_mod(self, mod):
@@ -44,7 +44,7 @@ class Competition(db.Model):
             "date": self.date.strftime("%d-%m-%Y"),
             "time": self.date.strftime("%I:%M %p"),
             "location": self.location,
-            "level" : self.level,
+            "weight" : self.weight,
             "max_score" : self.max_score,
             "moderators": [mod.username for mod in self.moderators],
         }
@@ -55,7 +55,7 @@ class Competition(db.Model):
             "Name": self.name,
             "Date": self.date,
             "Location": self.location,
-            "Level" : self.level,
+            "Weight" : self.weight,
             "Max Score" : self.max_score,
             "Moderators": [mod.username for mod in self.moderators],
         }

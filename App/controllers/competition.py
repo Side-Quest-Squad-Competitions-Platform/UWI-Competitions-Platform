@@ -3,7 +3,7 @@ from App.models import Competition, Moderator, Student, Result
 from datetime import datetime
 from collections import defaultdict
 
-def create_competition(mod_names, comp_name, date, location, level, max_score):
+def create_competition(mod_names, comp_name, date, location, weight, max_score):
     competition = get_competition_by_name(comp_name)
     if competition:
         print(f"Competition '{comp_name}' already exists.")
@@ -29,7 +29,7 @@ def create_competition(mod_names, comp_name, date, location, level, max_score):
         name=comp_name,
         date=date,
         location=location,
-        level=level,
+        weight=weight,
         max_score=max_score
     )
     
