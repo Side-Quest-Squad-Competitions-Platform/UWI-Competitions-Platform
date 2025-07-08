@@ -60,17 +60,17 @@ def competition_details_api(id):
     leaderboard = display_competition_results(competition.name)
     return jsonify(competition.toDict()), 200
 
-@api_views.route('/competitions/<string:comp_name>/results', methods=['POST'])
-def add_competition_results_api(comp_name):
-    competition = get_competition_by_name(comp_name)
-    data = request.json
-    students = [data['student1'], data['student2'], data['student3']]
-    response = add_team('robert', comp_name, data['team_name'], students)
-    if response:
-        response = add_results('robert', comp_name, data['team_name'], int(data['score']))
-    if response:
-        return jsonify({'message': "Results added successfully!"}), 201
-    return jsonify({'error': "Error adding results!"}), 500
+# @api_views.route('/competitions/<string:comp_name>/results', methods=['POST'])
+# def add_competition_results_api(comp_name):
+#     competition = get_competition_by_name(comp_name)
+#     data = request.json
+#     students = [data['student1'], data['student2'], data['student3']]
+#     response = add_team('robert', comp_name, data['team_name'], students)
+#     if response:
+#         response = add_results('robert', comp_name, data['team_name'], int(data['score']))
+#     if response:
+#         return jsonify({'message': "Results added successfully!"}), 201
+#     return jsonify({'error': "Error adding results!"}), 500
 
 @api_views.route('/notifications', methods=['GET'])
 @login_required

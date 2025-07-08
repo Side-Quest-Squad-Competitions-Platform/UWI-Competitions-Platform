@@ -90,20 +90,20 @@ def display_notifications(username):
 def display_rankings():
     students = get_all_students()
 
-    students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+    students.sort(key=lambda x: (x.points, x.comp_count), reverse=True)
 
     leaderboard = []
     count = 1
-    curr_high = students[0].rating_score
+    curr_high = students[0].points
     curr_rank = 1
         
     for student in students:
-        if curr_high != student.rating_score:
+        if curr_high != student.points:
             curr_rank = count
-            curr_high = student.rating_score
+            curr_high = student.points
 
         if student.comp_count != 0:
-            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.rating_score})
+            leaderboard.append({"placement": curr_rank, "student": student.username, "rating score":student.points})
             count += 1
 
     # print("Rank\tStudent\tRating Score")
