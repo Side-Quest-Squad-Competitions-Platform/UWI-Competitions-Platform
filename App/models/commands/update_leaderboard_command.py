@@ -13,26 +13,25 @@ class UpdateLeaderboardCommand(Command):
 
     def execute(self):
         students = Student.query.all()
-        students.sort(key=lambda x: (x.rating_score, x.comp_count), reverse=True)
+        students.sort(key=lambda x: (x.points, x.comp_count), reverse=True)
 
         leaderboard = []
         count = 1
-        curr_high = students[0].rating_score if students else 0
+        curr_high = students[0].points if students else 0
         curr_rank = 1
 
-        # Get the most recent competition
         latest_comp = Competition.query.order_by(Competition.date.desc()).first()
 
         for student in students:
-            if curr_high != student.rating_score:
+            if curr_high != student.points:
                 curr_rank = count
-                curr_high = student.rating_score
+                curr_high = student.points
 
             if student.comp_count != 0:
                 leaderboard.append({
                     "placement": curr_rank,
                     "student": student.username,
-                    "rating_score": student.rating_score
+                    "points": student.points
                 })
                 count += 1
 
@@ -59,7 +58,7 @@ class UpdateLeaderboardCommand(Command):
                         student_id=student.id,
                         competition_id=latest_comp.id,
                         rank=curr_rank,
-                        rating=student.rating_score,
+                        rating=student.points,
                         recorded_at=datetime.utcnow()
                     )
                     db.session.add(rank_history)

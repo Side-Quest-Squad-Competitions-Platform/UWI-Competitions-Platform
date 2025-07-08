@@ -101,68 +101,68 @@ def moderator_profile(id):
     return render_template('moderator_profile.html', moderator=moderator, user=current_user)
 
 
-@index_views.route('/init_postman', methods=['GET'])
-def init_postman():
+# @index_views.route('/init_postman', methods=['GET'])
+# def init_postman():
     
-    db.drop_all()
-    db.create_all()
+#     db.drop_all()
+#     db.create_all()
     
 
-    #creates students
-    with open("students.csv") as student_file:
-        reader = csv.DictReader(student_file)
+#     #creates students
+#     with open("students.csv") as student_file:
+#         reader = csv.DictReader(student_file)
 
-        for student in reader:
-            stud = create_student(student['username'], student['password'])
-            #db.session.add(stud)
-        #db.session.commit()
+#         for student in reader:
+#             stud = create_student(student['username'], student['password'])
+#             #db.session.add(stud)
+#         #db.session.commit()
     
-    student_file.close()
+#     student_file.close()
 
-    #creates moderators
-    with open("moderators.csv") as moderator_file:
-        reader = csv.DictReader(moderator_file)
+#     #creates moderators
+#     with open("moderators.csv") as moderator_file:
+#         reader = csv.DictReader(moderator_file)
 
-        for moderator in reader:
-            mod = create_moderator(moderator['username'], moderator['password'])
-            #db.session.add(mod)
-        #db.session.commit()
+#         for moderator in reader:
+#             mod = create_moderator(moderator['username'], moderator['password'])
+#             #db.session.add(mod)
+#         #db.session.commit()
     
-    moderator_file.close()
+#     moderator_file.close()
 
-    #creates competitions
-    with open("competitions.csv") as competition_file:
-        reader = csv.DictReader(competition_file)
+#     #creates competitions
+#     with open("competitions.csv") as competition_file:
+#         reader = csv.DictReader(competition_file)
 
-        for competition in reader:
-            comp = create_competition(competition['mod_names'], competition['comp_name'], competition['date'], competition['location'], competition['level'], competition['max_score'])
+#         for competition in reader:
+#             comp = create_competition(competition['mod_names'], competition['comp_name'], competition['date'], competition['location'], competition['level'], competition['max_score'])
     
-    competition_file.close()
+#     competition_file.close()
     
-    with open("results.csv") as results_file:
-        reader = csv.DictReader(results_file)
+#     with open("results.csv") as results_file:
+#         reader = csv.DictReader(results_file)
 
-        for result in reader:
-            students = [result['student1'], result['student2'], result['student3']]
-            team = add_team(result['mod_names'], result['comp_name'], result['team_name'], students)
-            add_results(result['mod_names'], result['comp_name'], result['team_name'], int(result['score']))
-            #db.session.add(comp)
-        #db.session.commit()
+#         for result in reader:
+#             students = [result['student1'], result['student2'], result['student3']]
+#             team = add_team(result['mod_names'], result['comp_name'], result['team_name'], students)
+#             add_results(result['mod_names'], result['comp_name'], result['team_name'], int(result['score']))
+#             #db.session.add(comp)
+#         #db.session.commit()
     
-    results_file.close()
+#     results_file.close()
 
-    with open("competitions.csv") as competitions_file:
-        reader = csv.DictReader(competitions_file)
+#     with open("competitions.csv") as competitions_file:
+#         reader = csv.DictReader(competitions_file)
 
-        for competition in reader:
-            update_ratings(competition['mod_names'], competition['comp_name'])
-            UpdateLeaderboardCommand(moderator_id=None).execute()
-            #db.session.add(comp)
-        #db.session.commit()
+#         for competition in reader:
+#             update_ratings(competition['mod_names'], competition['comp_name'])
+#             UpdateLeaderboardCommand(moderator_id=None).execute()
+#             #db.session.add(comp)
+#         #db.session.commit()
     
-    competitions_file.close()
+#     competitions_file.close()
 
-    return (jsonify({'message': "database_initialized"}),200)
+#     return (jsonify({'message': "database_initialized"}),200)
 
 
 @index_views.route('/rank-history/<int:student_id>')

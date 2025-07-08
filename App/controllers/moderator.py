@@ -104,7 +104,7 @@ def add_results(mod_names, comp_name, team_name, score):
         comp_team = CompetitionTeam.query.filter_by(comp_id=comp.id, team_id=team.id).first()
         if comp_team:
             comp_team.points_earned = score
-            comp_team.rating_score = (score / comp.max_score) * 20 * comp.level
+            comp_team.points = (score / comp.max_score) * 20 * comp.level
             try:
                 db.session.add(comp_team)
                 db.session.commit()
@@ -162,7 +162,7 @@ def update_ratings(mod_name, comp_name):
         ratio = res.score / winner_score
         points = ratio * comp_weight
 
-        student.rating_score += points
+        student.points += points
         if student.email not in updated_emails:
             student.comp_count += 1
             updated_emails.add(student.email)
