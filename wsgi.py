@@ -59,7 +59,7 @@ def initialize():
         reader = csv.DictReader(competitions_file)
 
         for competition in reader:
-            if competition['comp_name'] != 'TopCode':
+            if competition['comp_name'] != 'TopCoder':
                 mod_name = competition['mod_names'].split(',')[0].strip() 
                 update_ratings(mod_name, competition['comp_name'])
                 UpdateLeaderboardCommand(moderator_id=None).execute()

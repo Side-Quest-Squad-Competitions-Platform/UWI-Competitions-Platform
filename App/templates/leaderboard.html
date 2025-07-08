@@ -234,7 +234,7 @@
         <div class="top-ranked">
             {% if leaderboard|length > 1 %}
             <div class="top-card" style="animation-delay: 0.1s;">🥈 
-                <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[1]['student']) }}">
+                <a href="{{ url_for('index_views.student_profile_by_username', username=leaderboard[1]['student']) }}">
                     {{ leaderboard[1]['student'] }}
                 </a>
                 <br>Score: {{ '%.2f' % leaderboard[1]['rating score'] }}
@@ -243,7 +243,7 @@
             
             {% if leaderboard|length > 0 %}
             <div class="top-card first-place" style="animation-delay: 0.3s;">🥇 
-                <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[0]['student']) }}">
+                <a href="{{ url_for('index_views.student_profile_by_username', username=leaderboard[0]['student']) }}">
                     {{ leaderboard[0]['student'] }}
                 </a>
                 <br>Score: {{ '%.2f' % leaderboard[0]['rating score'] }}
@@ -252,7 +252,7 @@
             
             {% if leaderboard|length > 2 %}
             <div class="top-card" style="animation-delay: 0.5s;">🥉 
-                <a href="{{ url_for('index_views.student_profile_by_name', name=leaderboard[2]['student']) }}">
+                <a href="{{ url_for('index_views.student_profile_by_username', username=leaderboard[2]['student']) }}">
                     {{ leaderboard[2]['student'] }}
                 </a>
                 <br>Score: {{ '%.2f' % leaderboard[2]['rating score'] }}
@@ -273,7 +273,7 @@
                 <tr class="leaderboard-row" style="animation-delay: {{ loop.index0 * 0.1 + 0.7 }}s;">
                     <td>{{ student['placement'] }}</td>
                     <td>
-                        <a href="{{ url_for('index_views.student_profile_by_name', name=student['student']) }}">
+                        <a href="{{ url_for('index_views.student_profile_by_username', username=student['student']) }}">
                             {{ student['student'] }}
                         </a>
                     </td>

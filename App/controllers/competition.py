@@ -106,9 +106,9 @@ def display_competition_results(name):
 
     return leaderboard
 
-def get_competition_result(comp_id: int, team_id: int):
-    comp_team = CompetitionTeam.query.filter_by(comp_id=comp_id, team_id=team_id).first()
-    if comp_team:
-        return comp_team
-    return None
+# def get_competition_result(comp_id: int, team_id: int):
+#     comp_team = CompetitionTeam.query.filter_by(comp_id=comp_id, team_id=team_id).first()
+#     if comp_team:
+#         return comp_team
+#     return None
     
