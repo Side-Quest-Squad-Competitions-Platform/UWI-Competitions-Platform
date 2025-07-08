@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Moderator, Competition, CompetitionTeam, Result, Student
+from App.models import Moderator, Competition, Result, Student
 from App.models.commands.create_competition_command import CreateCompetitionCommand
 from App.models.commands.update_leaderboard_command import UpdateLeaderboardCommand
 from collections import defaultdict

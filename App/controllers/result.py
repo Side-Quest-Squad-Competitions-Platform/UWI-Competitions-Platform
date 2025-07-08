@@ -1,5 +1,5 @@
 from App.database import db
-from App.models import Competition, Moderator, CompetitionTeam, Student, Result #, Student, Admin, competition_student
+from App.models import Competition, Moderator, Student, Result
 from datetime import datetime
 
 def add_result(comp_id, full_name, email, team_name, score):
@@ -38,3 +38,11 @@ def get_results(comp_id, team_name):
         return results
     else:
         return None
+    
+def get_results_by_student_id(student_id):
+    results = Result.query.filter_by(student_id=student_id).all()
+    if results:
+        return results
+    else:
+        return None
+    

@@ -1,7 +1,6 @@
 from App.database import db
 from datetime import datetime
 from .competition_moderator import *
-from .competition_team import *
 
 class Competition(db.Model):
     __tablename__='competition'
@@ -14,7 +13,6 @@ class Competition(db.Model):
     max_score = db.Column(db.Integer, default=25)
     confirm = db.Column(db.Boolean, default=False)
     moderators = db.relationship('Moderator', secondary="competition_moderator", overlaps='competitions', lazy=True)
-    teams = db.relationship('Team', secondary="competition_team", overlaps='competitions', lazy=True)
     
     results = db.relationship('Result', overlaps='competitions', lazy=True)
 
@@ -89,7 +87,6 @@ class Competition(db.Model):
             "level" : self.level,
             "max_score" : self.max_score,
             "moderators": [mod.username for mod in self.moderators],
-            "teams": [team.name for team in self.teams]
         }
 
     def toDict(self):
@@ -101,7 +98,6 @@ class Competition(db.Model):
             "Level" : self.level,
             "Max Score" : self.max_score,
             "Moderators": [mod.username for mod in self.moderators],
-            "Teams": [team.name for team in self.teams]
         }
 
     def __repr__(self):

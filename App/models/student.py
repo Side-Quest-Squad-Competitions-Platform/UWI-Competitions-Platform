@@ -11,7 +11,6 @@ class Student(User):
     comp_count = db.Column(db.Integer, nullable=False, default=0)
     curr_rank = db.Column(db.Integer, nullable=False, default=0)
     prev_rank = db.Column(db.Integer, nullable=False, default=0)
-    teams = db.relationship('Team', secondary='student_team', overlaps='students', lazy=True)
     notifications = db.relationship('Notification', backref='student', lazy=True)
 
     def __init__(self, username, password, email, fName, lName):
@@ -23,7 +22,6 @@ class Student(User):
         self.comp_count = 0
         self.curr_rank = 0
         self.prev_rank = 0
-        self.teams = []
         self.notifications = []
 
     def add_notification(self, notification):

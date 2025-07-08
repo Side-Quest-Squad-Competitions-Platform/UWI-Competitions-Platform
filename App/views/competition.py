@@ -102,6 +102,25 @@ def competition_details(id):
     return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)#, team=team)
     
 
+@comp_views.route('/competition/<string:name>', methods=['GET'])
+def competition_details_by_name(name):
+    competition = get_competition_by_name(name)
+    if not competition:
+        return render_template('404.html')
+
+    if current_user.is_authenticated:
+        if session['user_type'] == 'moderator':
+            moderator = Moderator.query.filter_by(id=current_user.id).first()
+        else:
+            moderator = None
+    else:
+        moderator = None
+
+    leaderboard = display_competition_results(name)
+
+    return render_template('competition_details.html', competition=competition, moderator=moderator, leaderboard=leaderboard, user=current_user)
+
+
 #Redirecting to page to add competition results
 @comp_views.route('/add_results/<int:comp_id>', methods=['GET'])
 def add_results_page(comp_id):

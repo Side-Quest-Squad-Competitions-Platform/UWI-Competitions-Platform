@@ -35,22 +35,17 @@ def profile():
     return template
 
 
-# @index_views.route('/student_profile/<int:id>', methods=['GET'])
-# def student_profile(id):
-#     student = get_student(id)
+@index_views.route('/student_profile/<int:id>', methods=['GET'])
+def student_profile(id):
+    student = get_student(id)
 
-#     if not student:
-#         return render_template('404.html')
+    if not student:
+        return render_template('404.html')
     
-#     profile_info = display_student_info(student.username)
-#     competitions = profile_info['competitions']
-#     """
-#     competitions = Competition.query.filter(Competition.participants.any(id=user_id)).all()
-#     ranking = Ranking.query.filter_by(student_id=user_id).first()
-#     notifications= get_notifications(user.username)
-#     """
+    profile_info = display_student_info(student.username)
+    competitions = profile_info['competitions']
 
-#     return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
+    return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
 
 
 @index_views.route('/student_profile/<string:full_name>', methods=['GET'])
@@ -87,6 +82,7 @@ def student_profile_by_username(username):
     """
 
     return render_template('student_profile.html', student=student, competitions=competitions, user=current_user)
+
 
 @index_views.route('/moderator_profile/<int:id>', methods=['GET'])
 def moderator_profile(id):   

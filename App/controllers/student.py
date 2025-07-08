@@ -1,5 +1,7 @@
 from App.database import db
-from App.models import Student, Competition, Notification, CompetitionTeam
+from App.models import Student, Competition, Notification
+from App.controllers.result import get_results_by_student_id
+from App.controllers.competition import get_competition
 
 def create_student(username, password, fName, lName, email):
     student = get_student_by_username(username)
@@ -64,13 +66,11 @@ def display_student_info(username):
         return None
     else:
         competitions = []
-        
-        for team in student.teams:
-            team_comps = CompetitionTeam.query.filter_by(team_id=team.id).all()
-            for comp_team in team_comps:
-                comp = Competition.query.filter_by(id=comp_team.comp_id).first()
-                competitions.append(comp.name)
 
+        results = get_results_by_student_id(student.id)
+        for result in results:
+            competitions.append(get_competition(result.comp_id))
+        
         profile_info = {
             "profile" : student.get_json(),
             "competitions" : competitions
