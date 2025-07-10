@@ -149,8 +149,7 @@ def init():
                 update_ratings(mod_name, competition['comp_name'])
                 UpdateLeaderboardCommand(moderator_id=None).execute()
     competitions_file.close()
-
-    print('database intialized')
+    return redirect("/")
 
 # @index_views.route('/init_postman', methods=['GET'])
 # def init_postman():
