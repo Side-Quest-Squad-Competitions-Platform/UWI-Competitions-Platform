@@ -74,35 +74,22 @@ def display_competition_results(name):
         print(f'No results found for {name}!')
         return []
 
-    team_results = defaultdict(list)
-    for result in comp.results:
-        team_results[result.team_name].append(result)
-
-    team_data = []
-    for team_name, results in team_results.items():
-        team_score = results[0].score  # assume same score for team members
-        members = [f"{res.full_name}" for res in results]
-        team_data.append({"team": team_name, "score": team_score, "members": members})
-
-    team_data.sort(key=lambda x: x["score"], reverse=True)
-
     leaderboard = []
-    curr_high = None
-    curr_rank = 1
-    count = 1
+    comp.results.sort(key=lambda x: x.standing)
 
-    for entry in team_data:
-        if curr_high != entry["score"]:
-            curr_rank = count
-            curr_high = entry["score"]
+    for result in comp.results:
+        if not result.student_id:
+            status = False
+        else:
+            status = True
 
         leaderboard.append({
-            "placement": curr_rank,
-            "team": entry["team"],
-            "members": entry["members"],
-            "score": entry["score"]
+            "placement": result.standing,
+            "team": result.team_name,
+            "full_name": result.full_name,
+            "score": result.score,
+            "status": status
         })
-        count += 1
 
     return leaderboard
 
