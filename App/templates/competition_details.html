@@ -254,7 +254,7 @@
 
                     {% if session.get('user_type') == 'moderator' %}
                     <td class="edit-cell">
-                        <a href="{{ url_for('comp_views.delete_result', comp_id=competition.id, team_name=row['team']) }}" class="delete-icon" title="Delete this result">🗑️</a>
+                        <a href="{{ url_for('comp_views.delete_result', comp_id=competition.id, full_name=row['full_name']) }}" class="delete-icon" title="Delete this result">🗑️</a>
                     </td>
                     {% endif %}
                 </tr>

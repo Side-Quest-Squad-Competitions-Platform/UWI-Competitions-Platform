@@ -63,3 +63,10 @@ def get_results_by_student_id(student_id):
 
 def get_all_results():
     return Result.query.all()
+
+def get_results_by_name(comp_id, full_name):
+    results = Result.query.filter_by(comp_id=comp_id, full_name=full_name).all()
+    if results:
+        return results
+    else:
+        return None

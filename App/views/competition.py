@@ -232,9 +232,9 @@ def edit_competition(comp_id):
 
 
 # Fixed, not flashing unauthorized and not updating score and rankings
-@comp_views.route('/competitions/<int:comp_id>/delete/<string:team_name>', methods=['GET','POST'])
+@comp_views.route('/competitions/<int:comp_id>/delete/<string:full_name>', methods=['GET','POST'])
 @login_required
-def delete_result(comp_id,team_name):
+def delete_result(comp_id,full_name):
     comp = Competition.query.get_or_404(comp_id)
     if not comp:
         ConnectionAbortedError(404)
@@ -244,7 +244,7 @@ def delete_result(comp_id,team_name):
         flash("Unauthorized.")
         return redirect(request.referrer)
     
-    results = get_results(comp_id, team_name)
+    results = get_results_by_name(comp_id, full_name)
     if not results:
         ConnectionAbortedError(404)
 
