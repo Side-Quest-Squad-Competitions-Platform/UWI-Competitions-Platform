@@ -6,7 +6,7 @@ class Command(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-    moderator_id = db.Column(db.String, db.ForeignKey('moderator.id'))
+    moderator_id = db.Column(db.Integer, db.ForeignKey('moderator.id'))
     executed_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, moderator_id):
