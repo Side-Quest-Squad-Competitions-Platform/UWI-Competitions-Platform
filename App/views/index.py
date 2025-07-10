@@ -23,7 +23,7 @@ def leaderboard_page():
 def profile():
     user_type = session['user_type']
     id = current_user.get_id()
-    
+ 
     if user_type == 'moderator':
         template = moderator_profile(id)
     elif user_type == 'student':
@@ -85,7 +85,7 @@ def student_profile_by_username(username):
 
 
 @index_views.route('/moderator_profile/<int:id>', methods=['GET'])
-def moderator_profile(id):   
+def moderator_profile(id):
     moderator = get_moderator(id)
 
     if not moderator:
@@ -100,6 +100,57 @@ def moderator_profile(id):
     """
     return render_template('moderator_profile.html', moderator=moderator, user=current_user)
 
+
+@index_views.route('/init', methods=['GET'])
+def init():
+    db.drop_all()
+    db.create_all()
+
+    #creates students
+    with open("students.csv") as student_file:
+        reader = csv.DictReader(student_file)
+        for student in reader:
+            stud = create_student(student['username'], student['password'], student['fName'], student['lName'], student['email'])
+    student_file.close()
+
+    #creates moderators
+    with open("moderators.csv") as moderator_file:
+        reader = csv.DictReader(moderator_file)
+        for moderator in reader:
+            mod = create_moderator(moderator['username'], moderator['password'])
+    moderator_file.close()
+
+    #creates competitions
+    with open("competitions.csv") as competition_file:
+        reader = csv.DictReader(competition_file)
+        for competition in reader:
+            command = CreateCompetitionCommand(moderator_id=None)
+            comp = command.execute(
+                competition['mod_names'],
+                competition['comp_name'],
+                competition['date'],
+                competition['location'],
+                competition['weight'],
+                competition['max_score'])
+    competition_file.close()
+    
+    with open("results.csv") as results_file:
+        reader = csv.DictReader(results_file)
+        for result in reader:
+            res = add_result(result['comp_id'], result['full_name'], result['email'], result['team_name'], result['score'], result['standing'])
+    results_file.close()
+    
+    with open("competitions.csv") as competitions_file:
+        reader = csv.DictReader(competitions_file)
+
+        for competition in reader:
+            if competition['comp_name'] != 'TopCoder':
+                mod_name = competition['mod_names'].split(',')[0].strip() 
+                update_ratings(mod_name, competition['comp_name'])
+                UpdateLeaderboardCommand(moderator_id=None).execute()
+    competitions_file.close()
+
+    print('database intialized')
 
 # @index_views.route('/init_postman', methods=['GET'])
 # def init_postman():

@@ -27,7 +27,7 @@ def add_results(results):
 
     for result in results:
         student = get_student_by_email(result['email'])
-        if not student and result.full_name:
+        if not student and result['full_name']:
             student = get_student_by_full_name(result['full_name'])
 
         newResult = Result(comp_id=result['comp_id'], full_name=result['full_name'], email=result['email'], team_name=result['team_name'], score=result['score'], standing=result['standing'])
@@ -63,3 +63,10 @@ def get_results_by_student_id(student_id):
 
 def get_all_results():
     return Result.query.all()
+
+def get_results_by_name(comp_id, full_name):
+    results = Result.query.filter_by(comp_id=comp_id, full_name=full_name).all()
+    if results:
+        return results
+    else:
+        return None
