@@ -52,7 +52,7 @@ def initialize():
     with open("results.csv") as results_file:
         reader = csv.DictReader(results_file)
         for result in reader:
-            res = add_result(result['comp_id'], result['full_name'], result['email'], result['team_name'], result['score'])
+            res = add_result(result['comp_id'], result['full_name'], result['email'], result['team_name'], result['score'], result['standing'])
     results_file.close()
     
     with open("competitions.csv") as competitions_file:
@@ -65,54 +65,6 @@ def initialize():
                 UpdateLeaderboardCommand(moderator_id=None).execute()
     competitions_file.close()
 
-    """
-    stud1 = create_student('stud1', 'stud1pass')
-    stud2 = create_student('stud2', 'stud2pass')
-    stud3 = create_student('stud3', 'stud3pass')
-    stud4 = create_student('stud4', 'stud4pass')
-    stud5 = create_student('stud5', 'stud5pass')
-    stud6 = create_student('stud6', 'stud6pass')
-    stud7 = create_student('stud7', 'stud7pass')
-    stud8 = create_student('stud8', 'stud8pass')
-    stud9 = create_student('stud9', 'stud9pass')
-    stud10 = create_student('stud10', 'stud10pass')
-    mod1 = create_moderator('mod1', 'mod1pass')
-    mod2 = create_moderator('mod2', 'mod2pass')
-    mod3 = create_moderator('mod3', 'mod3pass')
-    comp1 = create_competition('mod1', 'comp1', '09-02-2024', 'CSL', 1, 25)
-    comp2 = create_competition('mod2', 'comp2', '09-02-2024', 'CSL', 2, 20)
-    mod = add_mod('mod1', 'comp1', 'mod3')
-
-    students = ["stud1", "stud2", "stud3"]
-    add_team('mod1', 'comp1', "team1", students)
-    add_results('mod1', 'comp1', "team1", 16)
-    
-    students = ["stud4", "stud5", "stud6"]
-    add_team('mod1', 'comp1', "team2", students)
-    add_results('mod1', 'comp1', "team2", 15)
-
-    students = ["stud7", "stud8", "stud9"]
-    add_team('mod1', 'comp1', "team3", students)
-    add_results('mod1', 'comp1', "team3", 12)
-
-    students = ["stud10", "stud4", "stud7"]
-    add_team('mod2', 'comp2', "team1", students)
-    add_results('mod2', 'comp2', "team1", 10)
-    
-    students = ["stud2", "stud5", "stud8"]
-    add_team('mod2', 'comp2', "team2", students)
-    add_results('mod2', 'comp2', "team2", 15)
-
-    students = ["stud3", "stud6", "stud9"]
-    add_team('mod2', 'comp2', "team3", students)
-    add_results('mod2', 'comp2', "team3", 12)
-
-    update_ratings('mod1', 'comp1')
-    UpdateLeaderboardCommand(moderator_id=None).execute()
-    
-    update_ratings('mod2', 'comp2')
-    UpdateLeaderboardCommand(moderator_id=None).execute()
-    """
     print('database intialized')
 
 '''

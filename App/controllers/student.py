@@ -29,6 +29,9 @@ def get_student_by_full_name(full_name):
     lName = parts[1] if len(parts) > 1 else ""
     return Student.query.filter_by(fName=fName, lName=lName).first()
 
+def get_student_by_email(email):
+    return Student.query.filter_by(email=email).first()
+
 def get_student(id):
     return Student.query.get(id)
 

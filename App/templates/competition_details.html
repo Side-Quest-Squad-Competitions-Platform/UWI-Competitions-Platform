@@ -56,7 +56,7 @@
         font-weight: 500;
     }
 
-    .sidebar.collapsed h2, 
+    .sidebar.collapsed h2,
     .sidebar.collapsed a span {
         display: none;
     }
@@ -217,9 +217,9 @@
     <div class="competition-wrapper">
         <div class="competition-header">
             {% if not competition.confirm %}
-                {{ competition.name }} Unofficial Results
+            {{ competition.name }} Unofficial Results
             {% else %}
-                {{ competition.name }} Official Results
+            {{ competition.name }} Official Results
             {% endif %}
         </div>
 
@@ -228,10 +228,10 @@
                 <tr>
                     <th>Rank</th>
                     <th>Team</th>
-                    <th>Members</th>
+                    <th>Participant</th>
                     <th>Score</th>
                     {% if session.get('user_type') == 'moderator' %}
-                    <th>Delete</th> 
+                    <th>Delete</th>
                     {% endif %}
 
                 </tr>
@@ -242,26 +242,25 @@
                     <td>{{ row['placement'] }}</td>
                     <td>{{ row['team'] }}</td>
                     <td>
-                        {% for student in row['members'] %}
-                            <a href="{{ url_for('index_views.student_profile_by_full_name', full_name=student) }}">{{ student }},</a>
-                        {% endfor %}
+                        {% if row['status'] %}
+                        <a href="{{ url_for('index_views.student_profile_by_full_name', full_name=row['full_name']) }}">
+                            {{ row['full_name'] }}
+                        </a>
+                        {% else %}
+                        {{ row['full_name'] }} <span style="color: red;">(Unregistered)</span>
+                        {% endif %}
                     </td>
                     <td>{{ row['score'] }}</td>
 
+                    {% if session.get('user_type') == 'moderator' %}
                     <td class="edit-cell">
-                        {% if session.get('user_type') == 'moderator' %}
-                        <a
-                          href="{{ url_for('comp_views.delete_result',
-                                           comp_id=competition.id,
-                                           team_name=row['team']) }}"
-                          class="delete-icon"
-                          title="Delete this result">🗑️</a>
-                          {% endif %}
-
+                        <a href="{{ url_for('comp_views.delete_result', comp_id=competition.id, team_name=row['team']) }}" class="delete-icon" title="Delete this result">🗑️</a>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
+
         </table>
 
         {% if session['user_type'] == 'moderator' and moderator in competition.moderators and not competition.confirm %}

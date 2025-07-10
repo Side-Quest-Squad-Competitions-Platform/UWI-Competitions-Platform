@@ -11,16 +11,16 @@ class Result(db.Model):
     score = db.Column(db.Integer, nullable=False)
     standing = db.Column(db.Integer, nullable=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=True)
-
     student = db.relationship("Student", backref="results", lazy=True)
 
 
-    def __init__(self, comp_id, full_name, email, team_name, score):
+    def __init__(self, comp_id, full_name, email, team_name, score, standing):
         self.comp_id = comp_id
         self.full_name = full_name
         self.email = email
         self.team_name = team_name
         self.score = score
+        self.standing = standing
     
     def get_json(self):
         return {

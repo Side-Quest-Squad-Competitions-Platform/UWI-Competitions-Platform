@@ -136,28 +136,25 @@ def update_ratings(mod_name, comp_name):
         print(f'{mod_name} is not authorized to finalize {comp_name}.')
         return None
 
-    # Get results for the competition
     results = Result.query.filter_by(comp_id=comp.id).all()
     if not results:
         print(f'No results found for {comp_name}.')
         return None
 
-    # Determine winning score
-    winner_score = max(res.score for res in results)
-    if winner_score == 0:
-        print("All scores are zero — cannot compute ratios.")
+    winner_result = next((r for r in results if r.standing == 1), None)
+    if not winner_result:
+        print("No winner found (no standing == 1). Cannot compute ratios.")
         return None
 
+    winner_score = winner_result.score
     comp_weight = comp.weight if comp.weight else 1
 
-    # Update matched students
     updated_emails = set()
     for res in results:
         student = Student.query.filter_by(email=res.email).first()
         if not student:
-            continue  # Skip unmatched participants
+            continue
 
-        # Compute points gained
         ratio = res.score / winner_score
         points = ratio * comp_weight
 
@@ -166,11 +163,9 @@ def update_ratings(mod_name, comp_name):
             student.comp_count += 1
             updated_emails.add(student.email)
 
-        res.student_id = student.id  # link result to student
         db.session.add(student)
         db.session.add(res)
 
-    # Finalize the competition
     try:
         comp.confirm = True
         db.session.add(comp)
