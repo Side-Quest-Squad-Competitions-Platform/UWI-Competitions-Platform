@@ -230,7 +230,7 @@
                     <th>Team</th>
                     <th>Participant</th>
                     <th>Score</th>
-                    {% if session.get('user_type') == 'moderator' %}
+                    {% if session.get('user_type') == 'moderator' and user in competition.moderators %}
                     <th>Delete</th>
                     {% endif %}
 
@@ -252,7 +252,7 @@
                     </td>
                     <td>{{ row['score'] }}</td>
 
-                    {% if session.get('user_type') == 'moderator' %}
+                    {% if session.get('user_type') == 'moderator' and user in competition.moderators %}
                     <td class="edit-cell">
                         <a href="{{ url_for('comp_views.delete_result', comp_id=competition.id, full_name=row['full_name']) }}" class="delete-icon" title="Delete this result">🗑️</a>
                     </td>
